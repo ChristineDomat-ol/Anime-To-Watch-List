@@ -31,8 +31,11 @@ namespace Anime_To_Watch_List
 
                         Console.WriteLine(addanime + " Added");
 
+                        do
+                        {
                             Console.Write("\n[Y/N] Add again?: ");
                             addchoice = Console.ReadLine().ToLower();
+                        } while (addchoice != "y" && addchoice != "n");
 
 
                     } while (addchoice == "y");
@@ -56,8 +59,11 @@ namespace Anime_To_Watch_List
                             Console.WriteLine("\n" + delanime + " is not in the list");
                         }
 
+                        do
+                        {
                             Console.Write("\n[Y/N] Delete Again?: ");
                             delchoice = Console.ReadLine().ToLower();
+                        } while (delchoice != "y" && delchoice != "n");
 
                     } while (delchoice == "y");
                 }
@@ -76,11 +82,12 @@ namespace Anime_To_Watch_List
                         else
                         {
                             Console.WriteLine("\n" + watchanime + " is not in the list");
-                            Console.WriteLine(watchanime + " has been Mark as Watched");
                         }
-
+                        do
+                        {
                             Console.Write("\n[Y/N] Mark as Watched Again?: ");
                             watchoice = Console.ReadLine().ToLower();
+                        } while (watchoice != "y" && watchoice != "n");
 
                     } while (watchoice == "y");
                 }
@@ -104,9 +111,11 @@ namespace Anime_To_Watch_List
                 {
                     Console.WriteLine("Invalid Input");
                 }
-
+                do
+                {
                     Console.Write("\n[Y/N] Do another transaction?: ");
                     transactionchoice = Console.ReadLine().ToLower();
+                } while (transactionchoice != "y" && transactionchoice != "n");
 
             } while (transactionchoice == "y");
 
