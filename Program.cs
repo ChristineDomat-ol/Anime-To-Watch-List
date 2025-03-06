@@ -28,9 +28,18 @@ namespace Anime_To_Watch_List
                     {
                         Console.Write("\nAdd Anime: ");
                         string addanime = Console.ReadLine();
-                        list.Add(addanime);
 
-                        Console.WriteLine(addanime + " Added");
+                        if (list.Contains(addanime))
+                        {
+                            Console.WriteLine(addanime + " is already in the List");
+
+                        }
+
+                        else
+                        {
+                            list.Add(addanime);
+                            Console.WriteLine(addanime + " Added");
+                        }
 
                         do
                         {
@@ -38,6 +47,7 @@ namespace Anime_To_Watch_List
                             addchoice = Console.ReadLine().ToLower();
                         } while (addchoice != "y" && addchoice != "n");
 
+                        
 
                     } while (addchoice == "y");
 
