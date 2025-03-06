@@ -79,7 +79,7 @@ namespace Anime_To_Watch_List
                         {
                             list.Remove(watchanime);
                             list.Add(watchanime + " - Watched");
-                            Console.WriteLine(watchanime + "has been Marked as Watched");
+                            Console.WriteLine(watchanime + " has been Marked as Watched");
                         }
                         else
                         {
