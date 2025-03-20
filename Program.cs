@@ -98,6 +98,11 @@ namespace Anime_To_Watch_List
             }
             else if (userAction == 2)
             {
+                if(list.Count == 0)
+                {
+                    Console.WriteLine("List is Empty, Please Add an Anime First");
+                    return;
+                }
                 do
                 {
                     Console.Write("Enter Anime to Delete: ");
@@ -126,22 +131,33 @@ namespace Anime_To_Watch_List
 
         static void MarkasWatched()
         {
+            if (list.Count == 0)
+            {
+                Console.WriteLine("List is Empty, Please Add an Anime First");
+                return;
+            }
             do
             {
                 Console.Write("\nMark as Watched: ");
                 string watchanime = Console.ReadLine();
-                if (list.Contains(watchanime))
+                if (!string.IsNullOrEmpty(watchanime))
                 {
-                    list.Remove(watchanime);
-                    list.Add(watchanime + " - Watched");
-                    Console.WriteLine(watchanime + " has been Marked as Watched");
-                    View();
+                    if (list.Contains(watchanime))
+                    {
+                        list.Remove(watchanime);
+                        list.Add(watchanime + " - Watched");
+                        Console.WriteLine(watchanime + " has been Marked as Watched");
+                        View();
+                    }
+                    else
+                    {
+                        Console.WriteLine("\n" + watchanime + " is not in the list");
+                    }
                 }
                 else
                 {
-                    Console.WriteLine("\n" + watchanime + " is not in the list");
+                    Console.WriteLine("Please Enter Anime");
                 }
-
             }
             while (Again());
         }
@@ -150,7 +166,7 @@ namespace Anime_To_Watch_List
         {
             if (list.Count == 0)
             {
-                Console.WriteLine("List is Empty");
+                Console.WriteLine("\nList is Empty");
             }
             else
             {
