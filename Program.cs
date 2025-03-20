@@ -42,7 +42,7 @@ namespace Anime_To_Watch_List
                 }
                 else
                 {
-                    Console.WriteLine("Invalid Input\n Enter 1-5");
+                    Console.WriteLine("Invalid Input\nEnter 1-5");
                 }
                 ShowActions();
                 action = GetUserInput();
