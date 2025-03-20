@@ -35,14 +35,9 @@ namespace Anime_To_Watch_List
                 {
                     View();
                 }
-                else if (action == 5)
-                {
-                    Console.WriteLine("\nThank you for using the Program\nDomat-ol, Christine L.\nBSIT 2-1");
-                    Environment.Exit(0);
-                }
                 else
                 {
-                    Console.WriteLine("Invalid Input\nEnter 1-5");
+                    Console.WriteLine("Invalid Input\nPlease Enter 1-5");
                 }
                 ShowActions();
                 action = GetUserInput();
