@@ -65,7 +65,7 @@ namespace Anime_To_Watch_List
 
         static void AddorDelAnime(int userAction)
         {
-            if (userAction == 1)
+            if (userAction == 1) //addAnime
             {
                 do
                 {
@@ -91,7 +91,7 @@ namespace Anime_To_Watch_List
                     }
                 } while (Again());
             }
-            else if (userAction == 2)
+            else if (userAction == 2) //delAnime
             {
                 if(list.Count == 0)
                 {
