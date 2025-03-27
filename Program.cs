@@ -47,6 +47,7 @@ namespace Anime_To_Watch_List
             Console.WriteLine("\nThank you for using the Program\nDomat-ol, Christine L.\nBSIT 2-1");
         }
 
+        // Menu
         static void ShowActions()
         {
             Console.WriteLine("\n-------------------");
@@ -58,20 +59,23 @@ namespace Anime_To_Watch_List
             }
         }
 
-        public static int GetUserActionInput()
+        //Gets user action input
+        static int GetUserActionInput()
         {
             Console.Write("\nACTION: ");
             int userAction = Convert.ToInt16(Console.ReadLine());
             return userAction;
         }
 
-        public static string GetUserAnimeInput()
+        //Gets user anime title input
+        static string GetUserAnimeInput()
         {
             string UserAnime = Console.ReadLine();
             return UserAnime;
         }
 
-        public static void AddAnime()
+        //Add
+        static void AddAnime()
         {
             do
             {
@@ -99,7 +103,8 @@ namespace Anime_To_Watch_List
             } while (Again());
         }
 
-        public static void DeleteAnime()
+        //Delete
+        static void DeleteAnime()
         {
             if (BusinessDataLogic.list.Count == 0)
             {
@@ -134,13 +139,15 @@ namespace Anime_To_Watch_List
             }
         }
 
-        public static void MarkasWatched()
+        //Mark as Watched
+        static void MarkasWatched()
         {
             if (BusinessDataLogic.list.Count == 0)
             {
                 Console.WriteLine("List is Empty, Please Add an Anime First");
                 return;
             }
+
             do
             {
                 Console.Write("Mark as Watched: ");
@@ -168,7 +175,8 @@ namespace Anime_To_Watch_List
 
         }
 
-        public static void View()
+        //View List
+        static void View()
         {
             if (BusinessDataLogic.list.Count == 0)
             {
@@ -184,7 +192,8 @@ namespace Anime_To_Watch_List
             }
         }
 
-        public static void Search()
+        //Search
+        static void Search()
         {            
             Console.Write("Search Anime: ");
             string AnimeName = GetUserAnimeInput();
@@ -199,7 +208,8 @@ namespace Anime_To_Watch_List
             }
         }
 
-        public static bool Again()
+        //Ask the user to repeat the action
+        static bool Again()
         {
             while (true)
             {
