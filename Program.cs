@@ -143,7 +143,7 @@ namespace Anime_To_Watch_List
             }
             do
             {
-                Console.WriteLine("Mark as Watched: ");
+                Console.Write("Mark as Watched: ");
                 string watchanime = GetUserAnimeInput();
 
                 if (!string.IsNullOrEmpty(watchanime))
