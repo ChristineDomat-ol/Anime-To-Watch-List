@@ -16,29 +16,29 @@ namespace Anime_To_Watch_List
             Console.WriteLine("My Anime List");
 
             ShowActions();
-            int useraction = GetUserActionInput();
+            string useraction = GetUserActionInput();
 
-            while (useraction != 6)
+            while (useraction != "6")
             {
                 switch (useraction)
                 {
-                    case 1:
+                    case "1":
                         AddAnime();
                         break;
-                    case 2:
+                    case "2":
                         DeleteAnime();
                         break;
-                    case 3:
+                    case "3":
                         MarkasWatched();
                         break;
-                    case 4:
+                    case "4":
                         View();
                         break;
-                    case 5:
+                    case "5":
                         Search();
                         break;
                     default:
-                        Console.WriteLine("Invalid Input\nPlease Enter 1-5");
+                        Console.WriteLine("Invalid Input\nPlease Enter 1-6");
                         break;
                 }
                 ShowActions();
@@ -60,10 +60,10 @@ namespace Anime_To_Watch_List
         }
 
         //Gets user action input
-        static int GetUserActionInput()
+        static string GetUserActionInput()
         {
             Console.Write("\nACTION: ");
-            int userAction = Convert.ToInt16(Console.ReadLine());
+            string userAction = Console.ReadLine();
             return userAction;
         }
 
@@ -77,6 +77,7 @@ namespace Anime_To_Watch_List
         //Add
         static void AddAnime()
         {
+            string action = "Add";    
             do
             {
                 Console.Write("Anime to Add: ");
@@ -100,7 +101,7 @@ namespace Anime_To_Watch_List
                 {
                     Console.WriteLine("Please Enter Anime");
                 }
-            } while (Again());
+            } while (Again(action));
         }
 
         //Delete
@@ -113,6 +114,7 @@ namespace Anime_To_Watch_List
             }
             else
             {
+                string action = "Delete";
                 do
                 {
                     Console.Write("Anime to Delete: ");
@@ -135,7 +137,7 @@ namespace Anime_To_Watch_List
                     {
                         Console.WriteLine("Please Enter Anime");
                     }
-                } while (Again());
+                } while (Again(action));
             }
         }
 
@@ -148,6 +150,7 @@ namespace Anime_To_Watch_List
                 return;
             }
 
+            string action = "Mark as Watched";
             do
             {
                 Console.Write("Mark as Watched: ");
@@ -171,7 +174,7 @@ namespace Anime_To_Watch_List
                     Console.WriteLine("Please Enter Anime");
                 }
             }
-            while (Again());
+            while (Again(action));
 
         }
 
@@ -194,26 +197,30 @@ namespace Anime_To_Watch_List
 
         //Search
         static void Search()
-        {            
-            Console.Write("Search Anime: ");
-            string AnimeName = GetUserAnimeInput();
+        {
+            string action = "Search";
+            do
+            {
+                Console.Write("Search Anime: ");
+                string AnimeName = GetUserAnimeInput();
 
-            if (BusinessDataLogic.AnimeIsInList(AnimeName))
-            {
-                Console.WriteLine("\n" + AnimeName + " Is in the List");
-            }
-            else
-            {
-                Console.WriteLine("\n" + AnimeName + " Is Not in the List");
-            }
+                if (BusinessDataLogic.AnimeIsInList(AnimeName))
+                {
+                    Console.WriteLine("\n" + AnimeName + " Is in the List");
+                }
+                else
+                {
+                    Console.WriteLine("\n" + AnimeName + " Is Not in the List");
+                }
+            } while (Again("Search"));
         }
 
         //Ask the user to repeat the action
-        static bool Again()
+        static bool Again(string action)
         {
             while (true)
             {
-                Console.Write("\n[Y/N] Again? ");
+                Console.Write("\n[Y/N] " +  action  + " Again? ");
                 string choice = Console.ReadLine().ToLower();
 
                 if (choice == "y")
