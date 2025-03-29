@@ -216,11 +216,11 @@ namespace Anime_To_Watch_List
                 {
                     if (AnimeBusinessDataLogic.AnimeIsInList(AnimeName))
                     {
-                        Console.WriteLine("\n" + AnimeName + " Is in the List");
+                        Console.WriteLine("\n" + AnimeName + " is IN the List");
                     }
                     else
                     {
-                        Console.WriteLine("\n" + AnimeName + " Is Not in the List");
+                        Console.WriteLine("\n" + AnimeName + " is NOT in the List");
                     }
                 }
                 else
