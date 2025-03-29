@@ -1,19 +1,23 @@
 ﻿using AnimeListProcesses;
-using System.Threading.Channels;
 
 namespace Anime_To_Watch_List
 {
     //UI Logic
     public class Program
     {
-        static string[] actions = new string[] { "[1] Add Anime", "[2] Delete Anime", "[3] Mark as Watched", "[4] View Anime List", "[5] Search Anime", "[6] EXIT" };
+        static string[] actions = new string[] {
+            "[1] Add Anime",
+            "[2] Delete Anime",
+            "[3] Search Anime",
+            "[4] View Anime List",
+            "[5] Mark as Watched",
+            "[6] EXIT"
+        };
 
         static void Main(string[] args)
         {
-
             //add anime, delete anime, mark anime as watched, search anime, view anime list, exit
-
-            Console.WriteLine("My Anime List");
+            Console.WriteLine("My Anime Manager");
 
             ShowActions();
             string useraction = GetUserActionInput();
@@ -29,13 +33,13 @@ namespace Anime_To_Watch_List
                         DeleteAnime();
                         break;
                     case "3":
-                        MarkasWatched();
+                        Search();
                         break;
                     case "4":
                         View();
                         break;
                     case "5":
-                        Search();
+                        MarkasWatched();
                         break;
                     default:
                         Console.WriteLine("Invalid Input\nPlease Enter 1-6");
@@ -77,22 +81,22 @@ namespace Anime_To_Watch_List
         //Add
         static void AddAnime()
         {
-            string action = "Add";    
+            string action = "Add";
             do
             {
                 Console.Write("Anime to Add: ");
                 string UserAnimeInput = GetUserAnimeInput();
-                    
+
                 if (!string.IsNullOrEmpty(UserAnimeInput))
                 {
-                    if (BusinessDataLogic.AnimeIsInList(UserAnimeInput))
+                    if (AnimeBusinessDataLogic.AnimeIsInList(UserAnimeInput))
                     {
                         Console.WriteLine(UserAnimeInput + " is already in the List");
-                    }   
+                    }
 
                     else
                     {
-                        BusinessDataLogic.AddAnime(UserAnimeInput);
+                        AnimeBusinessDataLogic.AddAnime(UserAnimeInput);
                         Console.WriteLine(UserAnimeInput + " Added");
                         View();
                     }
@@ -107,7 +111,7 @@ namespace Anime_To_Watch_List
         //Delete
         static void DeleteAnime()
         {
-            if (BusinessDataLogic.list.Count == 0)
+            if (AnimeBusinessDataLogic.EmptyList())
             {
                 Console.WriteLine("List is Empty, Please Add an Anime First");
                 return;
@@ -122,9 +126,9 @@ namespace Anime_To_Watch_List
 
                     if (!string.IsNullOrEmpty(UserAnimeInput))
                     {
-                        if (BusinessDataLogic.AnimeIsInList(UserAnimeInput))
+                        if (AnimeBusinessDataLogic.AnimeIsInList(UserAnimeInput))
                         {
-                            BusinessDataLogic.DeleteAnime(UserAnimeInput);
+                            AnimeBusinessDataLogic.DeleteAnime(UserAnimeInput);
                             Console.WriteLine(UserAnimeInput + " Deleted");
                             View();
                         }
@@ -144,7 +148,7 @@ namespace Anime_To_Watch_List
         //Mark as Watched
         static void MarkasWatched()
         {
-            if (BusinessDataLogic.list.Count == 0)
+            if (AnimeBusinessDataLogic.EmptyList())
             {
                 Console.WriteLine("List is Empty, Please Add an Anime First");
                 return;
@@ -158,9 +162,9 @@ namespace Anime_To_Watch_List
 
                 if (!string.IsNullOrEmpty(watchanime))
                 {
-                    if (BusinessDataLogic.AnimeIsInList(watchanime))
+                    if (AnimeBusinessDataLogic.AnimeIsInList(watchanime))
                     {
-                        BusinessDataLogic.MarkAnimeAsWatched(watchanime);
+                        AnimeBusinessDataLogic.MarkAnimeAsWatched(watchanime);
                         Console.WriteLine(watchanime + " has been Marked as Watched");
                         View();
                     }
@@ -181,14 +185,14 @@ namespace Anime_To_Watch_List
         //View List
         static void View()
         {
-            if (BusinessDataLogic.list.Count == 0)
+            if (AnimeBusinessDataLogic.EmptyList())
             {
                 Console.WriteLine("\nList is Empty");
             }
             else
             {
                 Console.WriteLine("\nAnime List:");
-                foreach (string AnimeName in BusinessDataLogic.list)
+                foreach (string AnimeName in AnimeBusinessDataLogic.animelist)
                 {
                     Console.WriteLine(AnimeName);
                 }
@@ -198,21 +202,33 @@ namespace Anime_To_Watch_List
         //Search
         static void Search()
         {
+            if (AnimeBusinessDataLogic.EmptyList())
+            {
+                Console.WriteLine("List is Empty, Please Add an Anime First");
+                return;
+            }
             string action = "Search";
             do
             {
                 Console.Write("Search Anime: ");
                 string AnimeName = GetUserAnimeInput();
-
-                if (BusinessDataLogic.AnimeIsInList(AnimeName))
+                if (!string.IsNullOrEmpty(AnimeName))
                 {
-                    Console.WriteLine("\n" + AnimeName + " Is in the List");
+                    if (AnimeBusinessDataLogic.AnimeIsInList(AnimeName))
+                    {
+                        Console.WriteLine("\n" + AnimeName + " Is in the List");
+                    }
+                    else
+                    {
+                        Console.WriteLine("\n" + AnimeName + " Is Not in the List");
+                    }
                 }
                 else
                 {
-                    Console.WriteLine("\n" + AnimeName + " Is Not in the List");
+                    Console.WriteLine("Please Enter Anime");
                 }
-            } while (Again("Search"));
+
+            } while (Again(action));
         }
 
         //Ask the user to repeat the action
@@ -220,7 +236,7 @@ namespace Anime_To_Watch_List
         {
             while (true)
             {
-                Console.Write("\n[Y/N] " +  action  + " Again? ");
+                Console.Write("\n[Y/N] " + action + " Again? ");
                 string choice = Console.ReadLine().ToLower();
 
                 if (choice == "y")
