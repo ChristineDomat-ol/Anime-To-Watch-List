@@ -231,9 +231,7 @@ namespace Anime_To_Watch_List
                     {
                         watchedStatus = "[Not Watched]";
                     }
-
                     Console.WriteLine("- " + anime.Name + " (" + anime.Genre + ", " + anime.ReleaseYear + ") " + watchedStatus);
-
                 }
             }
         }
@@ -255,6 +253,13 @@ namespace Anime_To_Watch_List
                     if (AnimeBusinessLogic.IsAnimeInList(currentUser, AnimeName))
                     {
                         Console.WriteLine("\n" + AnimeName + " is IN the List");
+                        foreach (var anime in businessLogic.GetUserAnimeList(currentUser))
+                        {
+                            if (anime.Name == AnimeName)
+                            {
+                                Console.WriteLine("- " + anime.Name + " (" + anime.Genre + ", " + anime.ReleaseYear + ")");
+                            }
+                        }
                     }
                     else
                     {
@@ -339,8 +344,7 @@ namespace Anime_To_Watch_List
                 }
             
         }
-
-
+        
         static void SignUp()
         {
             string UserName;
