@@ -368,7 +368,7 @@ namespace Anime_To_Watch_List
                     LogIn();
                     return;
                 }
-                else if (businessLogic.IsAccountExists(UserName))
+                else if (businessLogic.DoesUserNameExists(UserName))
                 {
                     Console.WriteLine("FAILED: UserName already exists. Please try again.\n");
                 }

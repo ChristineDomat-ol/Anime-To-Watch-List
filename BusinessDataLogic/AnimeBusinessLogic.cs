@@ -60,9 +60,9 @@ namespace BusinessLogic
             dataLogic.AddAccount(Name, UserName, Password);
         }
 
-        public bool IsAccountExists(string UserName)
+        public bool DoesUserNameExists(string UserName)
         {
-            return dataLogic.IsAccountExists(UserName);
+            return dataLogic.DoesUserNameExists(UserName);
         }
     }
 }

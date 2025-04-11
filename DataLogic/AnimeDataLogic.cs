@@ -104,7 +104,7 @@ namespace DataLogic
             }
             return null; 
         }
-        public bool IsAccountExists(string UserName)
+        public bool DoesUserNameExists(string UserName)
         {
             foreach (var account in AnimeAccount)
             {
