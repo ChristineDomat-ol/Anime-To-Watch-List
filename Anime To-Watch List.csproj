@@ -9,13 +9,20 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <Compile Remove="Accounts\**" />
     <Compile Remove="BusinessDataLogic\**" />
+    <Compile Remove="DataLogic\**" />
+    <EmbeddedResource Remove="Accounts\**" />
     <EmbeddedResource Remove="BusinessDataLogic\**" />
+    <EmbeddedResource Remove="DataLogic\**" />
+    <None Remove="Accounts\**" />
     <None Remove="BusinessDataLogic\**" />
+    <None Remove="DataLogic\**" />
   </ItemGroup>
 
   <ItemGroup>
-    <ProjectReference Include="BusinessDataLogic\BusinessDataLogic.csproj" />
+    <ProjectReference Include="Accounts\AnimeBlueprints.csproj" />
+    <ProjectReference Include="BusinessDataLogic\BusinessLogic.csproj" />
   </ItemGroup>
 
 </Project>

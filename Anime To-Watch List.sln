@@ -5,7 +5,11 @@ VisualStudioVersion = 17.13.35825.156
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Anime To-Watch List", "Anime To-Watch List.csproj", "{637750D1-3686-E311-4017-DC8434CD34C9}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "BusinessDataLogic", "BusinessDataLogic\BusinessDataLogic.csproj", "{FBC85198-8878-495A-9D8C-B07B6E7B8BFD}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "BusinessLogic", "BusinessDataLogic\BusinessLogic.csproj", "{FBC85198-8878-495A-9D8C-B07B6E7B8BFD}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "DataLogic", "DataLogic\DataLogic.csproj", "{AC273A1D-73C0-4AE2-905D-A0883C271DC1}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "AnimeBlueprints", "Accounts\AnimeBlueprints.csproj", "{542A68A8-A853-40EC-ADF2-772A122D5823}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -21,6 +25,14 @@ Global
 		{FBC85198-8878-495A-9D8C-B07B6E7B8BFD}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{FBC85198-8878-495A-9D8C-B07B6E7B8BFD}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{FBC85198-8878-495A-9D8C-B07B6E7B8BFD}.Release|Any CPU.Build.0 = Release|Any CPU
+		{AC273A1D-73C0-4AE2-905D-A0883C271DC1}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{AC273A1D-73C0-4AE2-905D-A0883C271DC1}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{AC273A1D-73C0-4AE2-905D-A0883C271DC1}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{AC273A1D-73C0-4AE2-905D-A0883C271DC1}.Release|Any CPU.Build.0 = Release|Any CPU
+		{542A68A8-A853-40EC-ADF2-772A122D5823}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{542A68A8-A853-40EC-ADF2-772A122D5823}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{542A68A8-A853-40EC-ADF2-772A122D5823}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{542A68A8-A853-40EC-ADF2-772A122D5823}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
