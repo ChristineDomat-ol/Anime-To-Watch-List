@@ -4,43 +4,59 @@ namespace DataLogic
 {
     public class AnimeDataLogic
     {
-        public List<Frames> AnimeAccount = new List<Frames>();
-        public static Frames LoggedInUser { get; set; }
+        public List<Frame> AnimeAccount = new List<Frame>();
 
-        public static bool IsAnimeInList(string AnimeName)
+
+        public static void AddAnime(Frame Username, string AnimeName, string Genre, string ReleaseDate)
         {
-            return LoggedInUser.AnimeList.Contains(AnimeName);
+            Username.AnimeList.Add(new Anime
+            {
+                Name = AnimeName,
+                Genre = Genre,
+                ReleaseDate = ReleaseDate
+            });
         }
 
-        public static void AddAnime(string AnimeName)
+        public static void DeleteAnime(Frame UserName, string AnimeName)
         {
-            LoggedInUser.AnimeList.Add(AnimeName);
+            Anime animeToRemove = null;
+
+            foreach (var anime in UserName.AnimeList)
+            {
+                if (anime.Name == AnimeName)
+                {
+                    UserName.AnimeList.Remove(animeToRemove);
+                    break;
+                }
+            }
         }
 
-        public static void DeleteAnime(string AnimeName)
+        public static void MarkAnimeAsWatched(Frame UserName, string AnimeName)
         {
-            LoggedInUser.AnimeList.Remove(AnimeName);
+
+            foreach (var anime in UserName.AnimeList)
+            {
+                if (anime.Name == AnimeName)
+                {
+                    anime.IsWatched = true;
+                    break;
+                }
+            }
         }
 
-        public static void MarkAnimeAsWatched(string AnimeName)
+        public static bool EmptyList(Frame UserName)
         {
-            int index = LoggedInUser.AnimeList.IndexOf(AnimeName);
-            LoggedInUser.AnimeList[index] = AnimeName + " - Watched";
-        }
-
-        public static bool EmptyList()
-        {
-            if (LoggedInUser == null)
+            if (UserName == null)
             {
                 return true;
             }
-            return LoggedInUser.AnimeList.Count == 0;
+            return UserName.AnimeList.Count == 0;
         }
 
 
-        public List<string> GetUserAnimeList()
+        public List<Anime> GetUserAnimeList(Frame UserName)
         {
-            return LoggedInUser.AnimeList;
+            return UserName.AnimeList;
         }
        
         public AnimeDataLogic()
@@ -50,28 +66,28 @@ namespace DataLogic
 
         private void CreateDummyAnimeAccounts()
         {
-            AnimeAccount.Add(new Frames
+            AnimeAccount.Add(new Frame
             {
                 Name = "Christine Domat-ol",
                 UserName = "tin",
                 Password = "1111",
             });
 
-            AnimeAccount.Add(new Frames
+            AnimeAccount.Add(new Frame
             {
                 Name = "Roxanne Oliveros",
                 UserName = "rox",
                 Password = "2222",
             });
 
-            AnimeAccount.Add(new Frames
+            AnimeAccount.Add(new Frame
             {
                 Name = "Meagan Enguerra",
                 UserName = "megs",
                 Password = "3333",
             });
 
-            AnimeAccount.Add(new Frames
+            AnimeAccount.Add(new Frame
             {
                 Name = "Jobel Araw",
                 UserName = "jobs",
@@ -81,7 +97,7 @@ namespace DataLogic
 
         public void AddAccount(string Name, string UserName, string Password)
         {
-            AnimeAccount.Add(new Frames
+            AnimeAccount.Add(new Frame
             {
                 Name = Name,
                 UserName = UserName,
@@ -89,17 +105,18 @@ namespace DataLogic
             });
         }
 
-        public bool ValidateAccount(string Email, string Password)
+        public Frame ValidateAccount(string Email, string Password)
         {
             foreach (var account in AnimeAccount)
             {
                 if (account.UserName == Email && account.Password == Password)
                 {
-                    return true;
+                    return account; 
                 }
             }
-            return false;
+            return null; 
         }
+
 
     }
 

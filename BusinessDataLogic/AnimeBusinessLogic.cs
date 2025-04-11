@@ -7,42 +7,49 @@ namespace BusinessLogic
     {
         AnimeDataLogic dataLogic = new AnimeDataLogic();
 
-        public List<Frames> GetAnimeAccounts()
+        public List<Frame> GetAnimeAccounts()
         {
             return dataLogic.AnimeAccount;
         }
 
-        public List<string> GetUserAnimeList()
+        public List<Anime> GetUserAnimeList(Frame UserName)
         {
-            return dataLogic.GetUserAnimeList();
+            return dataLogic.GetUserAnimeList(UserName);
         }
 
-        public static bool IsAnimeInList(string AnimeName)
+        public static bool IsAnimeInList(Frame UserName, string AnimeName)
         {
-            return AnimeDataLogic.IsAnimeInList(AnimeName);
+            foreach (var anime in UserName.AnimeList)
+            {
+                if (anime.Name == AnimeName)
+                {
+                    return true;
+                }
+            }
+            return false;
         }
 
-        public static void AddAnime(string AnimeName)
+        public static void AddAnime(Frame UserName, string AnimeName, string Genre, string ReleaseDate)
         {
-            AnimeDataLogic.AddAnime(AnimeName);
+            AnimeDataLogic.AddAnime(UserName, AnimeName, Genre, ReleaseDate);
         }
 
-        public static void DeleteAnime(string AnimeName)
+        public static void DeleteAnime(Frame UserName, string AnimeName)
         {
-            AnimeDataLogic.DeleteAnime(AnimeName);
+            AnimeDataLogic.DeleteAnime(UserName, AnimeName);
         }
 
-        public static void MarkAnimeAsWatched(string AnimeName)
+        public static void MarkAnimeAsWatched(Frame UserName, string AnimeName)
         {
-            AnimeDataLogic.MarkAnimeAsWatched(AnimeName);
+            AnimeDataLogic.MarkAnimeAsWatched(UserName, AnimeName);
         }
 
-        public static bool EmptyList()
+        public static bool EmptyList(Frame UserName)
         {
-            return AnimeDataLogic.EmptyList();
+            return AnimeDataLogic.EmptyList(UserName);
         }
 
-        public bool ValidateAccount(string Email, string Password)
+        public Frame ValidateAccount(string Email, string Password)
         {
             return dataLogic.ValidateAccount(Email, Password);
         }
