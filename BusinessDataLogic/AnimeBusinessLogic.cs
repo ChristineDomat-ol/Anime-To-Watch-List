@@ -29,24 +29,25 @@ namespace BusinessLogic
             return false;
         }
 
-        public static void AddAnime(Frame UserName, string AnimeName, string Genre, string ReleaseDate)
+        public void AddAnime(Frame UserName, string AnimeName, string Genre, string ReleaseDate)
         {
-            AnimeDataLogic.AddAnime(UserName, AnimeName, Genre, ReleaseDate);
+            dataLogic.AddAnime(UserName, AnimeName, Genre, ReleaseDate);
         }
 
-        public static void DeleteAnime(Frame UserName, string AnimeName)
+        public void DeleteAnime(Frame UserName, string AnimeName)
         {
-            AnimeDataLogic.DeleteAnime(UserName, AnimeName);
+            dataLogic.DeleteAnime(UserName, AnimeName);
         }
 
-        public static void MarkAnimeAsWatched(Frame UserName, string AnimeName)
+        public void MarkAnimeAsWatched(Frame UserName, string AnimeName)
         {
-            AnimeDataLogic.MarkAnimeAsWatched(UserName, AnimeName);
+            dataLogic.MarkAnimeAsWatched(UserName, AnimeName);
         }
 
-        public static bool EmptyList(Frame UserName)
+        public bool IsAnimeListEmpty(Frame user)
         {
-            return AnimeDataLogic.EmptyList(UserName);
+            var list = dataLogic.GetUserAnimeList(user);
+            return list.Count == 0;
         }
 
         public Frame ValidateAccount(string Email, string Password)
@@ -58,6 +59,5 @@ namespace BusinessLogic
         {
             dataLogic.AddAccount(Name, UserName, Password);
         }
-
     }
 }

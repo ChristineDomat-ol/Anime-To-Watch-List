@@ -7,31 +7,29 @@ namespace DataLogic
         public List<Frame> AnimeAccount = new List<Frame>();
 
 
-        public static void AddAnime(Frame Username, string AnimeName, string Genre, string ReleaseDate)
+        public void AddAnime(Frame Username, string AnimeName, string Genre, string ReleaseDate)
         {
             Username.AnimeList.Add(new Anime
             {
                 Name = AnimeName,
                 Genre = Genre,
-                ReleaseDate = ReleaseDate
+                ReleaseYear = ReleaseDate
             });
         }
 
-        public static void DeleteAnime(Frame UserName, string AnimeName)
+        public void DeleteAnime(Frame UserName, string AnimeName)
         {
-            Anime animeToRemove = null;
-
             foreach (var anime in UserName.AnimeList)
             {
                 if (anime.Name == AnimeName)
                 {
-                    UserName.AnimeList.Remove(animeToRemove);
+                    UserName.AnimeList.Remove(anime);
                     break;
                 }
             }
         }
 
-        public static void MarkAnimeAsWatched(Frame UserName, string AnimeName)
+        public void MarkAnimeAsWatched(Frame UserName, string AnimeName)
         {
 
             foreach (var anime in UserName.AnimeList)
@@ -43,16 +41,6 @@ namespace DataLogic
                 }
             }
         }
-
-        public static bool EmptyList(Frame UserName)
-        {
-            if (UserName == null)
-            {
-                return true;
-            }
-            return UserName.AnimeList.Count == 0;
-        }
-
 
         public List<Anime> GetUserAnimeList(Frame UserName)
         {

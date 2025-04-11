@@ -126,7 +126,7 @@ namespace Anime_To_Watch_List
 
                     else
                     {
-                        AnimeBusinessLogic.AddAnime(currentUser, UserAnimeInput, Genre, ReleaseDate);
+                        businessLogic.AddAnime(currentUser, UserAnimeInput, Genre, ReleaseDate);
                         Console.WriteLine(UserAnimeInput + " Added");
                         View();
                     }
@@ -157,7 +157,7 @@ namespace Anime_To_Watch_List
                     {
                         if (AnimeBusinessLogic.IsAnimeInList(currentUser, UserAnimeInput))
                         {
-                            AnimeBusinessLogic.DeleteAnime(currentUser, UserAnimeInput);
+                            businessLogic.DeleteAnime(currentUser, UserAnimeInput);
                             Console.WriteLine(UserAnimeInput + " Deleted");
                             View();
                         }
@@ -185,6 +185,7 @@ namespace Anime_To_Watch_List
             string action = "Mark as Watched";
             do
             {
+                View();
                 Console.Write("Mark as Watched: ");
                 string watchanime = GetUserAnimeInput();
 
@@ -192,7 +193,7 @@ namespace Anime_To_Watch_List
                 {
                     if (AnimeBusinessLogic.IsAnimeInList(currentUser, watchanime))
                     {
-                        AnimeBusinessLogic.MarkAnimeAsWatched(currentUser, watchanime);
+                        businessLogic.MarkAnimeAsWatched(currentUser, watchanime);
                         Console.WriteLine(watchanime + " has been Marked as Watched");
                         View();
                     }
@@ -231,7 +232,7 @@ namespace Anime_To_Watch_List
                         watchedStatus = "[Not Watched]";
                     }
 
-                    Console.WriteLine("- " + anime.Name + " (" + anime.Genre + ", " + anime.ReleaseDate + ") " + watchedStatus);
+                    Console.WriteLine("- " + anime.Name + " (" + anime.Genre + ", " + anime.ReleaseYear + ") " + watchedStatus);
 
                 }
             }
