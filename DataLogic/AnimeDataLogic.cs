@@ -6,7 +6,6 @@ namespace DataLogic
     {
         public List<Accounts> AnimeAccount = new List<Accounts>();
 
-
         public void AddAnime(Accounts Username, string AnimeName, string Genre, string ReleaseDate)
         {
             Username.AnimeList.Add(new AnimeListFrame.AnimeList
