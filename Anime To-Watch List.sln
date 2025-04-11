@@ -9,7 +9,7 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "BusinessLogic", "BusinessDa
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "DataLogic", "DataLogic\DataLogic.csproj", "{AC273A1D-73C0-4AE2-905D-A0883C271DC1}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "AnimeBlueprints", "Accounts\AnimeBlueprints.csproj", "{542A68A8-A853-40EC-ADF2-772A122D5823}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Properties", "Accounts\Properties.csproj", "{542A68A8-A853-40EC-ADF2-772A122D5823}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution

@@ -21,7 +21,7 @@
   </ItemGroup>
 
   <ItemGroup>
-    <ProjectReference Include="Accounts\AnimeBlueprints.csproj" />
+    <ProjectReference Include="Accounts\Properties.csproj" />
     <ProjectReference Include="BusinessDataLogic\BusinessLogic.csproj" />
   </ItemGroup>
 
