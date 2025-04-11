@@ -1,4 +1,4 @@
-﻿using Blueprints;
+﻿using AccountFrame;
 using BusinessLogic;
 using DataLogic;
 
@@ -22,7 +22,7 @@ namespace Anime_To_Watch_List
         };
 
         static BusinessLogic.AnimeBusinessLogic businessLogic = new BusinessLogic.AnimeBusinessLogic();
-        static Frame currentUser;
+        static Accounts currentUser;
         static bool isLoggedIn = false;
 
         static void Main(string[] args)
@@ -140,7 +140,7 @@ namespace Anime_To_Watch_List
 
         static void DeleteAnime()
         {
-            if (AnimeBusinessLogic.EmptyList(currentUser))
+            if (businessLogic.IsAnimeListEmpty(currentUser))
             {
                 Console.WriteLine("List is Empty, Please Add an Anime First");
                 return;
@@ -176,7 +176,7 @@ namespace Anime_To_Watch_List
 
         static void MarkasWatched()
         {
-            if (AnimeBusinessLogic.EmptyList(currentUser))
+            if (businessLogic.IsAnimeListEmpty(currentUser))
             {
                 Console.WriteLine("List is Empty, Please Add an Anime First");
                 return;
@@ -213,7 +213,7 @@ namespace Anime_To_Watch_List
 
         static void View()
         {
-            if (AnimeBusinessLogic.EmptyList(currentUser))
+            if (businessLogic.IsAnimeListEmpty(currentUser))
             {
                 Console.WriteLine("\nList is Empty");
             }
@@ -240,7 +240,7 @@ namespace Anime_To_Watch_List
 
         static void Search()
         {
-            if (AnimeBusinessLogic.EmptyList(currentUser))
+            if (businessLogic.IsAnimeListEmpty(currentUser))
             {
                 Console.WriteLine("List is Empty, Please Add an Anime First");
                 return;
@@ -325,7 +325,7 @@ namespace Anime_To_Watch_List
             Console.Write("Enter Password: ");
             Password = Console.ReadLine();
                 
-                Frame account = businessLogic.ValidateAccount(UserName, Password); 
+                Accounts account = businessLogic.ValidateAccount(UserName, Password); 
                 if (account != null)
                 {
                     currentUser = account;
@@ -350,19 +350,27 @@ namespace Anime_To_Watch_List
             do
             {
                 Console.Write("Enter Name: ");
-                Name = Console.ReadLine();
+                Name = Console.ReadLine().Trim();
                 Console.Write("Enter UserName: ");
-                UserName = Console.ReadLine();
+                UserName = Console.ReadLine().Trim();
                 Console.Write("Enter Password: ");
-                Password = Console.ReadLine();
+                Password = Console.ReadLine().Trim();
 
-                Frame account = businessLogic.ValidateAccount(UserName, Password);
+                Accounts account = businessLogic.ValidateAccount(UserName, Password);
 
-                if (account != null)
+                if (string.IsNullOrEmpty(Name) || string.IsNullOrEmpty(UserName) || string.IsNullOrEmpty(Password))
+                {
+                    Console.WriteLine("Please Enter Name, UserName and Password\n");
+                }
+                else if (account != null)
                 {
                     Console.WriteLine("FAILED: Account already exists. Please Log In.\n");
                     LogIn();
                     return;
+                }
+                else if (businessLogic.IsAccountExists(UserName))
+                {
+                    Console.WriteLine("FAILED: UserName already exists. Please try again.\n");
                 }
                 else
                 {
