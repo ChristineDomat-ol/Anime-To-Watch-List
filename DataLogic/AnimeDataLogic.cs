@@ -1,121 +1,56 @@
 ﻿using AccountFrame;
+using System.Globalization;
 
 namespace DataLogic
 {
+    
+
     public class AnimeDataLogic
     {
-        public List<Accounts> AnimeAccount = new List<Accounts>();
+        IAnimeDataLogic animeDataLogic;
+
+        public AnimeDataLogic()
+        {
+            //animeDataLogic = new TextFileDataLogic();
+            //animeDataLogic = new InMemoryDataLogic();
+            animeDataLogic = new JsonFileDataLogic();
+
+        }
+
+        public List<Accounts> GetAnimeAccount()
+        {
+            return animeDataLogic.GetAnimeAccount();
+        }
+
+        public void AddAccount(Accounts accounts)
+        {
+            animeDataLogic.AddAccount(accounts);
+        }
+
+        public void DeleteAccount(Accounts account)
+        {
+            animeDataLogic.DeleteAccount(account);
+        }
 
         public void AddAnime(Accounts Username, string AnimeName, string Genre, string ReleaseDate)
         {
-            Username.AnimeList.Add(new AnimeListFrame.AnimeList
-            {
-                Name = AnimeName,
-                Genre = Genre,
-                ReleaseYear = ReleaseDate
-            });
+            animeDataLogic.AddAnime(Username, AnimeName, Genre, ReleaseDate);
         }
 
-        public void DeleteAnime(Accounts UserName, string AnimeName)
+        public void DeleteAnime(Accounts account, int AnimeNameIndex)
         {
-            foreach (var anime in UserName.AnimeList)
-            {
-                if (anime.Name == AnimeName)
-                {
-                    UserName.AnimeList.Remove(anime);
-                    break;
-                }
-            }
+            animeDataLogic.DeleteAnime(account, AnimeNameIndex);
         }
 
-        public void MarkAnimeAsWatched(Accounts UserName, string AnimeName)
+        public void MarkAnimeAsWatched(Accounts UserName, int AnimeName, string formattedDate, string Rate)
         {
-
-            foreach (var anime in UserName.AnimeList)
-            {
-                if (anime.Name == AnimeName)
-                {
-                    anime.IsWatched = true;
-                    break;
-                }
-            }
+            animeDataLogic.MarkAnimeAsWatched(UserName, AnimeName, formattedDate, Rate);
         }
 
         public List<AnimeListFrame.AnimeList> GetUserAnimeList(Accounts UserName)
         {
-            return UserName.AnimeList;
+            return animeDataLogic.GetUserAnimeList(UserName);
         }
-       
-        public AnimeDataLogic()
-        {
-            CreateDummyAnimeAccounts();
-        }
-
-        private void CreateDummyAnimeAccounts()
-        {
-            AnimeAccount.Add(new Accounts
-            {
-                Name = "Christine Domat-ol",
-                UserName = "tin",
-                Password = "1111",
-            });
-
-            AnimeAccount.Add(new Accounts
-            {
-                Name = "Roxanne Oliveros",
-                UserName = "rox",
-                Password = "2222",
-            });
-
-            AnimeAccount.Add(new Accounts
-            {
-                Name = "Meagan Enguerra",
-                UserName = "megs",
-                Password = "3333",
-            });
-
-            AnimeAccount.Add(new Accounts
-            {
-                Name = "Jobel Araw",
-                UserName = "jobs",
-                Password = "4444",
-            });
-        }
-
-        public void AddAccount(string Name, string UserName, string Password)
-        {
-            AnimeAccount.Add(new Accounts
-            {
-                Name = Name,
-                UserName = UserName,
-                Password = Password,
-            });
-        }
-
-        public Accounts ValidateAccount(string UserName, string Password)
-        {
-            foreach (var account in AnimeAccount)
-            {
-                if (account.UserName == UserName && account.Password == Password)
-                {
-                    return account; 
-                }
-            }
-            return null; 
-        }
-        public bool DoesUserNameExists(string UserName)
-        {
-            foreach (var account in AnimeAccount)
-            {
-                if (account.UserName == UserName)
-                {
-                    return true;
-                }
-            }
-            return false; 
-        }
-
     }
-
 }
 

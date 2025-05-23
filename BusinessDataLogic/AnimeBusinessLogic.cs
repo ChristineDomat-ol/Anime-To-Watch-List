@@ -7,26 +7,123 @@ namespace BusinessLogic
     {
         AnimeDataLogic dataLogic = new AnimeDataLogic();
 
-        public List<Accounts> GetAnimeAccounts()
-        {
-            return dataLogic.AnimeAccount;
-        }
-
         public List<AnimeListFrame.AnimeList> GetUserAnimeList(Accounts UserName)
         {
             return dataLogic.GetUserAnimeList(UserName);
         }
 
-        public static bool IsAnimeInList(Accounts UserName, string AnimeName)
+        public AnimeListFrame.AnimeList GetAnimeByName(Accounts UserName, string AnimeName)
         {
             foreach (var anime in UserName.AnimeList)
             {
-                if (anime.Name == AnimeName)
+                if (anime.Name.Equals(AnimeName, StringComparison.OrdinalIgnoreCase))
                 {
-                    return true;
+                    return anime;
                 }
             }
-            return false;
+            return null;
+        }
+
+        public List<AnimeListFrame.AnimeList> GetAnimeByGenre(Accounts UserName, string AnimeGenre)
+        {
+            List<AnimeListFrame.AnimeList> AnimeByGenreList = new List<AnimeListFrame.AnimeList>();
+
+            foreach (var anime in UserName.AnimeList)
+            {
+                if (anime.Genre.Equals(AnimeGenre, StringComparison.OrdinalIgnoreCase))
+                {
+                    AnimeByGenreList.Add(anime);
+                }
+            }
+            if (AnimeByGenreList.Count == 0)
+            {
+                return null;
+            }
+            else
+            {
+                return AnimeByGenreList;
+            }
+        }
+
+        public List<AnimeListFrame.AnimeList> GetAnimeByReleaseYear(Accounts UserName, string ReleaseYear)
+        {
+            List<AnimeListFrame.AnimeList> AnimeByReleaseYearList = new List<AnimeListFrame.AnimeList>();
+
+            foreach (var anime in UserName.AnimeList)
+            {
+                if (anime.ReleaseYear.Equals(ReleaseYear, StringComparison.OrdinalIgnoreCase))
+                {
+                    AnimeByReleaseYearList.Add(anime);
+                }
+            }
+            if (AnimeByReleaseYearList.Count == 0)
+            {
+                return null;
+            }
+            else
+            {
+                return AnimeByReleaseYearList;
+            }
+        }
+
+        public static int GetAnimeIndex(Accounts UserName, string AnimeName)
+        {
+            for (int i = 0; i < UserName.AnimeList.Count; i++)
+            {
+                if (UserName.AnimeList[i].Name.Equals(AnimeName, StringComparison.OrdinalIgnoreCase))
+                {
+                    return i;
+                }
+            }
+            return -1;
+        }
+
+        public bool GetAnimeStatusIsWatched(Accounts UserName, int AnimeNameIndex)
+        {
+            return UserName.AnimeList[AnimeNameIndex].IsWatched;
+        }
+
+        public List<AnimeListFrame.AnimeList> GetAnimeToWatchedList(Accounts UserName)
+        {        
+            List<AnimeListFrame.AnimeList> AnimeWatchedList = new List<AnimeListFrame.AnimeList>();
+
+            foreach (var anime in UserName.AnimeList)
+            {
+                if (!anime.IsWatched)
+                {
+                    AnimeWatchedList.Add(anime);
+                }
+            }
+            if (AnimeWatchedList.Count == 0)
+            {
+                return null;
+            }
+            else
+            {
+                return AnimeWatchedList;
+            }
+        }
+                    
+        public List<AnimeListFrame.AnimeList> GetAnimeWatchedList(Accounts UserName)
+        {        
+            List<AnimeListFrame.AnimeList> AnimeToWatchedList = new List<AnimeListFrame.AnimeList>();
+
+            foreach (var anime in UserName.AnimeList)
+            {
+                if (anime.IsWatched)
+                {
+                    AnimeToWatchedList.Add(anime);
+                }
+            }
+
+            if(AnimeToWatchedList.Count == 0)
+            {
+                return null;
+            }
+            else
+            {
+                return AnimeToWatchedList;
+            }
         }
 
         public void AddAnime(Accounts UserName, string AnimeName, string Genre, string ReleaseDate)
@@ -34,35 +131,38 @@ namespace BusinessLogic
             dataLogic.AddAnime(UserName, AnimeName, Genre, ReleaseDate);
         }
 
-        public void DeleteAnime(Accounts UserName, string AnimeName)
+        public void DeleteAnime(Accounts account, int AnimeNameIndex)
         {
-            dataLogic.DeleteAnime(UserName, AnimeName);
+            dataLogic.DeleteAnime(account, AnimeNameIndex);
         }
 
-        public void MarkAnimeAsWatched(Accounts UserName, string AnimeName)
+        public void MarkAnimeAsWatched(Accounts UserName, int AnimeName, string formattedDate, string Rate)
         {
-            dataLogic.MarkAnimeAsWatched(UserName, AnimeName);
-        }
-
-        public bool IsAnimeListEmpty(Accounts user)
-        {
-            var list = dataLogic.GetUserAnimeList(user);
-            return list.Count == 0;
+            dataLogic.MarkAnimeAsWatched(UserName, AnimeName, formattedDate, Rate);
         }
 
         public Accounts ValidateAccount(string UserName, string Password)
         {
-            return dataLogic.ValidateAccount(UserName, Password);
+            dataLogic.GetAnimeAccount();
+
+            foreach (var account in dataLogic.GetAnimeAccount())
+            {
+                if (account.UserName == UserName && account.Password == Password)
+                {
+                    return account;
+                }
+            }
+            return null;
         }
 
-        public void AddAccount(string Name, string UserName, string Password)
+        public void AddAccount(Accounts account)
         {
-            dataLogic.AddAccount(Name, UserName, Password);
+            dataLogic.AddAccount(account);
         }
 
-        public bool DoesUserNameExists(string UserName)
+        public void DeleteAccount(Accounts account)
         {
-            return dataLogic.DoesUserNameExists(UserName);
+            dataLogic.DeleteAccount(account);
         }
     }
 }

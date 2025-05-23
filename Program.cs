@@ -1,27 +1,44 @@
 ﻿using AccountFrame;
 using BusinessLogic;
 using DataLogic;
+using System.Xml.Linq;
 
 namespace Anime_To_Watch_List
 {
     public class Program
     {
-        static string[] actions = new string[] {
+        static string[] MenuActions = new string[] {
             "[1] Add Anime",
             "[2] Delete Anime",
             "[3] Search Anime",
             "[4] View Anime List",
             "[5] Mark as Watched",
-            "[6] Log Out",
-            "[7] EXIT"
+            "[6] Delete Account",
+            "[7] Log Out"
         };
 
-        static string[] accountActions = new string[] {
+        static string[] ViewActions = new string[] {
+            "[1] View All",
+            "[2] View To-Watched List",
+            "[3] View Watched List",
+            "[4] Back"
+        };
+
+        static string[] AccountActions = new string[] {
             "[1] Log In",
-            "[2] Sign Up"
+            "[2] Sign Up",
+            "[3] EXIT"
         };
 
-        static BusinessLogic.AnimeBusinessLogic businessLogic = new BusinessLogic.AnimeBusinessLogic();
+        static string[] SearchActions = new string[] {
+            "[1] Search by Anime",
+            "[2] Search by Genre",
+            "[3] Search by Release Year",
+            "[4] Back"
+        };
+
+        static AnimeBusinessLogic businessLogic = new BusinessLogic.AnimeBusinessLogic();
+
         static Accounts currentUser;
         static bool isLoggedIn = false;
 
@@ -33,7 +50,7 @@ namespace Anime_To_Watch_List
 
             while (isLoggedIn == true)
             {
-                ShowActions();
+                ShowMenuActions();
                 string useraction = GetUserActionInput();
 
                 while (useraction != "7")
@@ -47,46 +64,126 @@ namespace Anime_To_Watch_List
                             DeleteAnime();
                             break;
                         case "3":
-                            Search();
+
+                            if (businessLogic.GetUserAnimeList(currentUser) == null)
+                            {
+                                Console.WriteLine("\nList is Empty");
+                                break;
+                            }
+
+                            ShowSearchMenuActions();
+                            string searchAction = GetUserActionInput();
+
+                            while (searchAction != "4")
+                            {
+                                if (searchAction == "1")
+                                {
+                                    SearchByName();
+                                }
+                                else if (searchAction == "2")
+                                {
+                                    SearchByGenre();
+                                }
+                                else if (searchAction == "3")
+                                {
+                                    SearchByReleaseYear();
+                                }
+                                else
+                                {
+                                    Console.WriteLine("Invalid Input\nPlease Enter 1-4");
+                                }
+                                ShowSearchMenuActions();
+                                searchAction = GetUserActionInput();
+                            }
                             break;
+
                         case "4":
-                            View();
+
+                            if (businessLogic.GetUserAnimeList(currentUser) == null)
+                            {
+                                Console.WriteLine("\nList is Empty");
+                                break;
+                            }
+
+                            ShowViewMenuActions();
+                            string viewAction = GetUserActionInput();
+
+                            while (viewAction != "4")
+                            {
+                                if (viewAction == "1")
+                                {
+                                    ViewList();
+                                }
+                                else if (viewAction == "2")
+                                {
+                                    ViewToWatchedList();
+                                }
+                                else if (viewAction == "3")
+                                {
+                                    ViewWatchedList();
+                                }
+                                else
+                                {
+                                    Console.WriteLine("Invalid Input\nPlease Enter 1-3");
+                                }
+                                ShowViewMenuActions();
+                                viewAction = GetUserActionInput();
+                            }
                             break;
                         case "5":
                             MarkasWatched();
                             break;
                         case "6":
-                            Console.WriteLine("Logging Out...");
-                            SignUpOrLogIn();
+                            DeleteAccount();
                             break;
                         default:
-                            Console.WriteLine("Invalid Input\nPlease Enter 1-6");
+                            Console.WriteLine("Invalid Input\nPlease Enter 1-7");
                             break;
                     }
-                    ShowActions();
+                    ShowMenuActions();
                     useraction = GetUserActionInput();
                 }
-                Console.WriteLine("\nThank you for using the Program\nDomat-ol, Christine L.\nBSIT 2-1");
-                Environment.Exit(0);
+                Console.WriteLine("Logging Out...");
+                SignUpOrLogIn();
             }
         }
 
-        static void ShowActions()
+        static void ShowMenuActions()
         {
             Console.WriteLine("\n-------------------");
             Console.WriteLine("MENU");
 
-            foreach (string action in actions)
+            foreach (string action in MenuActions)
             {
                 Console.WriteLine(action);
             }
         }
 
-        static void ShowAccountActions()
+        static void ShowViewMenuActions()
+        {
+            Console.WriteLine("\n-------------------");
+            Console.WriteLine("VIEW");
+            foreach (string action in ViewActions)
+            {
+                Console.WriteLine(action);
+            }
+        }
+
+        static void ShowSearchMenuActions()
+        {
+            Console.WriteLine("\n-------------------");
+            Console.WriteLine("SEARCH");
+            foreach (string action in SearchActions)
+            {
+                Console.WriteLine(action);
+            }
+        }
+
+        static void ShowLogInOrSignUpActions()
         {
             Console.WriteLine("\n-------------------");
 
-            foreach (string accountAction in accountActions)
+            foreach (string accountAction in AccountActions)
             {
                 Console.WriteLine(accountAction);
             }
@@ -110,37 +207,51 @@ namespace Anime_To_Watch_List
             string action = "Add";
             do
             {
-                Console.Write("Anime to Add: ");
-                string UserAnimeInput = GetUserAnimeInput();
-                Console.Write("Genre: ");
-                string Genre = Console.ReadLine();
-                Console.Write("Release Year: ");
-                string ReleaseDate = Console.ReadLine();
+                string UserAnimeInput = string.Empty;
+                string Genre = string.Empty;
+                string ReleaseDate = string.Empty;
+                bool isValidInput = false;
 
-                if (!string.IsNullOrEmpty(UserAnimeInput))
+                do
                 {
-                    if (AnimeBusinessLogic.IsAnimeInList(currentUser, UserAnimeInput))
+                    Console.Write("\nAnime to Add: ");
+                    UserAnimeInput = GetUserAnimeInput();
+
+                    if (businessLogic.GetAnimeByName(currentUser, UserAnimeInput) != null)
                     {
                         Console.WriteLine(UserAnimeInput + " is already in the List");
+                        ViewList();
+                        break;
                     }
 
+                    Console.Write("Genre: ");
+                    Genre = Console.ReadLine();
+                    Console.Write("Release Year: ");
+                    ReleaseDate = Console.ReadLine();
+
+                    if (string.IsNullOrEmpty(UserAnimeInput) || string.IsNullOrEmpty(Genre) || string.IsNullOrEmpty(ReleaseDate))
+                    {
+                        Console.WriteLine("\nPlease Enter Anime, Genre and Release Year");
+                        return;
+                    }
                     else
                     {
+                        isValidInput = true;
+
                         businessLogic.AddAnime(currentUser, UserAnimeInput, Genre, ReleaseDate);
                         Console.WriteLine(UserAnimeInput + " Added");
-                        View();
+                        ViewList();
                     }
-                }
-                else
-                {
-                    Console.WriteLine("Please Enter Anime");
-                }
+                } while (isValidInput == false);
+
+
+
             } while (Again(action));
         }
 
         static void DeleteAnime()
         {
-            if (businessLogic.IsAnimeListEmpty(currentUser))
+            if (businessLogic.GetUserAnimeList(currentUser) == null)
             {
                 Console.WriteLine("List is Empty, Please Add an Anime First");
                 return;
@@ -150,20 +261,24 @@ namespace Anime_To_Watch_List
                 string action = "Delete";
                 do
                 {
-                    Console.Write("Anime to Delete: ");
+                    ViewList();
+
+                    Console.Write("\nAnime to Delete: ");
                     string UserAnimeInput = GetUserAnimeInput();
 
                     if (!string.IsNullOrEmpty(UserAnimeInput))
                     {
-                        if (AnimeBusinessLogic.IsAnimeInList(currentUser, UserAnimeInput))
+                        if (businessLogic.GetAnimeByName(currentUser, UserAnimeInput) != null)
                         {
-                            businessLogic.DeleteAnime(currentUser, UserAnimeInput);
+                            int animeIndex = AnimeBusinessLogic.GetAnimeIndex(currentUser, UserAnimeInput);
+                            businessLogic.DeleteAnime(currentUser, animeIndex);
                             Console.WriteLine(UserAnimeInput + " Deleted");
-                            View();
+                            ViewList();
                         }
                         else
                         {
                             Console.WriteLine("\n" + UserAnimeInput + " is not in the list");
+                            ViewList();
                         }
                     }
                     else
@@ -176,7 +291,7 @@ namespace Anime_To_Watch_List
 
         static void MarkasWatched()
         {
-            if (businessLogic.IsAnimeListEmpty(currentUser))
+            if (businessLogic.GetUserAnimeList(currentUser) == null)
             {
                 Console.WriteLine("List is Empty, Please Add an Anime First");
                 return;
@@ -185,21 +300,42 @@ namespace Anime_To_Watch_List
             string action = "Mark as Watched";
             do
             {
-                View();
-                Console.Write("Mark as Watched: ");
-                string watchanime = GetUserAnimeInput();
 
-                if (!string.IsNullOrEmpty(watchanime))
+                if (businessLogic.GetAnimeToWatchedList(currentUser) == null)
                 {
-                    if (AnimeBusinessLogic.IsAnimeInList(currentUser, watchanime))
+                    Console.WriteLine("\nAll Anime has been Marked as Watched");
+                    return;
+                }
+
+                Console.Write("\nMark as Watched: ");
+                string UserAnimeInput = GetUserAnimeInput();
+
+                if (!string.IsNullOrEmpty(UserAnimeInput))
+                {
+                    if (businessLogic.GetAnimeByName(currentUser, UserAnimeInput) != null)
                     {
-                        businessLogic.MarkAnimeAsWatched(currentUser, watchanime);
-                        Console.WriteLine(watchanime + " has been Marked as Watched");
-                        View();
+                        int animeIndex = AnimeBusinessLogic.GetAnimeIndex(currentUser, UserAnimeInput);
+
+                        if (businessLogic.GetAnimeStatusIsWatched(currentUser, animeIndex))
+                        {
+                            Console.WriteLine(UserAnimeInput + " is already in your Watched List");
+                        }
+                        else
+                        {
+                            DateTime dateTime = DateTime.Now;
+                            string formattedDate = dateTime.ToString("MMMM d, yyyy h:mm tt");
+
+
+                            string rating = GetRating();
+
+                            businessLogic.MarkAnimeAsWatched(currentUser, animeIndex, formattedDate, rating);
+                            Console.WriteLine("\n" + UserAnimeInput + " has been Marked as Watched");
+                            ViewList();
+                        }
                     }
                     else
                     {
-                        Console.WriteLine("\n" + watchanime + " is not in the list");
+                        Console.WriteLine("\n" + UserAnimeInput + " is not in the list");
                     }
                 }
                 else
@@ -211,11 +347,31 @@ namespace Anime_To_Watch_List
 
         }
 
-        static void View()
+        static string GetRating()
         {
-            if (businessLogic.IsAnimeListEmpty(currentUser))
+            string rating;
+            Console.Write("\nRate the Anime from 1-5" +
+                "\n1 Lowest\t5 Highest" +
+                "\nRating: ");
+            rating = Console.ReadLine();
+
+            while (string.IsNullOrEmpty(rating) || (rating != "1" && rating != "2" && rating != "3" && rating != "4" && rating != "5"))
             {
-                Console.WriteLine("\nList is Empty");
+
+                Console.WriteLine("\n-------------------------------" +
+                    "\nPlease Enter a Rating from 1-5");
+                rating = GetRating();
+
+            }
+
+            return rating;
+        }
+
+        static void ViewList()
+        {
+            if (businessLogic.GetUserAnimeList(currentUser) == null)
+            {
+                Console.WriteLine("\nAnime List is Empty");
             }
             else
             {
@@ -225,7 +381,7 @@ namespace Anime_To_Watch_List
                     string watchedStatus;
                     if (anime.IsWatched)
                     {
-                        watchedStatus = "[Watched]";
+                        watchedStatus = "[Watched - " + anime.DateAndTime + "] Rating: " + anime.Ratings + " stars";
                     }
                     else
                     {
@@ -234,11 +390,48 @@ namespace Anime_To_Watch_List
                     Console.WriteLine("- " + anime.Name + " (" + anime.Genre + ", " + anime.ReleaseYear + ") " + watchedStatus);
                 }
             }
+
         }
 
-        static void Search()
+        static void ViewToWatchedList()
         {
-            if (businessLogic.IsAnimeListEmpty(currentUser))
+            if (businessLogic.GetAnimeToWatchedList(currentUser) == null)
+            {
+                Console.WriteLine("\nTo-Watch List is Empty");
+            }
+            else
+            {
+                Console.WriteLine("\nTo-Watch List:");
+                foreach (var anime in businessLogic.GetAnimeToWatchedList(currentUser))
+                {
+
+                    Console.WriteLine("- " + anime.Name + " (" + anime.Genre + ", " + anime.ReleaseYear + ")" + " [Not Watched]");
+
+                }
+            }
+        }
+
+        static void ViewWatchedList()
+        {
+            if (businessLogic.GetAnimeWatchedList(currentUser) == null)
+            {
+                Console.WriteLine("Watched List is Empty");
+            }
+            else
+            {
+                Console.WriteLine("\nWatched List:");
+                foreach (var anime in businessLogic.GetAnimeWatchedList(currentUser))
+                {
+
+                    Console.WriteLine("- " + anime.Name + " (" + anime.Genre + ", " + anime.ReleaseYear + ") [Watched  - " + anime.DateAndTime + "] Rating: " + anime.Ratings + " stars");
+
+                }
+            }
+        }
+
+        static void SearchByName()
+        {
+            if (businessLogic.GetUserAnimeList(currentUser) == null)
             {
                 Console.WriteLine("List is Empty, Please Add an Anime First");
                 return;
@@ -246,24 +439,119 @@ namespace Anime_To_Watch_List
             string action = "Search";
             do
             {
-                Console.Write("Search Anime: ");
+                Console.Write("Search Anime By Name: ");
                 string AnimeName = GetUserAnimeInput();
                 if (!string.IsNullOrEmpty(AnimeName))
                 {
-                    if (AnimeBusinessLogic.IsAnimeInList(currentUser, AnimeName))
+                    if (businessLogic.GetAnimeByName(currentUser, AnimeName) != null)
                     {
-                        Console.WriteLine("\n" + AnimeName + " is IN the List");
-                        foreach (var anime in businessLogic.GetUserAnimeList(currentUser))
+                        var anime = businessLogic.GetAnimeByName(currentUser, AnimeName);
+
+                        string watchedStatus;
+                        if (anime.IsWatched)
                         {
-                            if (anime.Name == AnimeName)
-                            {
-                                Console.WriteLine("- " + anime.Name + " (" + anime.Genre + ", " + anime.ReleaseYear + ")");
-                            }
+                            watchedStatus = "[Watched - " + anime.DateAndTime + "] Rating: " + anime.Ratings + " stars";
                         }
+                        else
+                        {
+                            watchedStatus = "[Not Watched]";
+                        }
+                        Console.WriteLine("- " + anime.Name + " (" + anime.Genre + ", " + anime.ReleaseYear + ") " + watchedStatus);
+
                     }
                     else
                     {
                         Console.WriteLine("\n" + AnimeName + " is NOT in the List");
+                    }
+                }
+                else
+                {
+                    Console.WriteLine("Please Enter Anime");
+                }
+
+            } while (Again(action));
+        }
+
+        static void SearchByGenre()
+        {
+            if (businessLogic.GetUserAnimeList(currentUser) == null)
+            {
+                Console.WriteLine("List is Empty, Please Add an Anime First");
+                return;
+            }
+            string action = "Search";
+            do
+            {
+                Console.Write("Search Anime By Genre: ");
+                string AnimeGenre = GetUserAnimeInput();
+                if (!string.IsNullOrEmpty(AnimeGenre))
+                {
+                    if (businessLogic.GetAnimeByGenre(currentUser, AnimeGenre) != null)
+                    {
+                        foreach (var anime in businessLogic.GetAnimeByGenre(currentUser, AnimeGenre))
+                        {
+                            string watchedStatus;
+                            if (anime.IsWatched)
+                            {
+                                watchedStatus = "[Watched - " + anime.DateAndTime + "] Rating: " + anime.Ratings + " stars";
+                            }
+                            else
+                            {
+                                watchedStatus = "[Not Watched]";
+                            }
+                            Console.WriteLine("- " + anime.Name + " (" + anime.Genre + ", " + anime.ReleaseYear + ") " + watchedStatus);
+
+                        }
+
+                    }
+                    else
+                    {
+                        Console.WriteLine("\nThere is NO " + AnimeGenre + " Genre in the List");
+                    }
+                }
+                else
+                {
+                    Console.WriteLine("Please Enter Anime");
+                }
+
+            } while (Again(action));
+        }
+
+        static void SearchByReleaseYear()
+        {
+            if (businessLogic.GetUserAnimeList(currentUser) == null)
+            {
+                Console.WriteLine("List is Empty, Please Add an Anime First");
+                return;
+            }
+            string action = "Search";
+            do
+            {
+                Console.Write("Search Anime By Release Year: ");
+                string AnimeGenre = GetUserAnimeInput();
+                if (!string.IsNullOrEmpty(AnimeGenre))
+                {
+                    if (businessLogic.GetAnimeByReleaseYear(currentUser, AnimeGenre) != null)
+                    {
+                        foreach (var anime in businessLogic.GetAnimeByReleaseYear(currentUser, AnimeGenre))
+                        {
+                            string watchedStatus;
+                            if (anime.IsWatched)
+                            {
+                                watchedStatus = "[Watched - " + anime.DateAndTime + "] Rating: " + anime.Ratings + " stars";
+                            }
+                            else
+                            {
+                                watchedStatus = "[Not Watched]";
+                            }
+                            Console.WriteLine("- " + anime.Name + " (" + anime.Genre + ", " + anime.ReleaseYear + ") " + watchedStatus);
+
+                        }
+
+                    }
+                    else
+                    {
+                        Console.WriteLine("\nThere is NO " + AnimeGenre + " Release Year in the List");
                     }
                 }
                 else
@@ -301,7 +589,7 @@ namespace Anime_To_Watch_List
             string useraccountAction;
             do
             {
-                ShowAccountActions();
+                ShowLogInOrSignUpActions();
                 useraccountAction = GetUserActionInput();
 
                 switch (useraccountAction)
@@ -311,6 +599,11 @@ namespace Anime_To_Watch_List
                         break;
                     case "2":
                         SignUp();
+                        break;
+                    case "3":
+                        Console.WriteLine("\nThank you for using the Program\nDomat-ol, Christine L.\nBSIT 2-1");
+                        Console.WriteLine("\nExiting...");
+                        Environment.Exit(0);
                         break;
                     default:
                         Console.WriteLine("Invalid Input\nPlease Enter 1 or 2");
@@ -329,22 +622,22 @@ namespace Anime_To_Watch_List
 
             Console.Write("Enter Password: ");
             Password = Console.ReadLine();
-                
-                Accounts account = businessLogic.ValidateAccount(UserName, Password); 
-                if (account != null)
-                {
-                    currentUser = account;
-                    isLoggedIn = true;
-                    Console.WriteLine("Log In Successful");
-                }
-                else
-                {
-                    Console.WriteLine("FAILED: Incorrect UserName or Password. Please try again.");
-                    SignUpOrLogIn();
-                }
-            
+
+            Accounts account = businessLogic.ValidateAccount(UserName, Password);
+            if (account != null)
+            {
+                currentUser = account;
+                isLoggedIn = true;
+                Console.WriteLine("Log In Successful");
+            }
+            else
+            {
+                Console.WriteLine("FAILED: Account Doesn't Exist or Incorrect Password. Please try again.");
+                SignUpOrLogIn();
+            }
+
         }
-        
+
         static void SignUp()
         {
             string UserName;
@@ -372,13 +665,16 @@ namespace Anime_To_Watch_List
                     LogIn();
                     return;
                 }
-                else if (businessLogic.DoesUserNameExists(UserName))
-                {
-                    Console.WriteLine("FAILED: UserName already exists. Please try again.\n");
-                }
                 else
                 {
-                    businessLogic.AddAccount(Name, UserName, Password);
+                    Accounts newAccount = new Accounts
+                    {
+                        Name = Name,
+                        UserName = UserName,
+                        Password = Password
+                    };
+
+                    businessLogic.AddAccount(newAccount);
                     Console.WriteLine("Account Created Successfully");
                     Console.WriteLine("Please Log In\n");
                     LogIn();
@@ -386,5 +682,46 @@ namespace Anime_To_Watch_List
                 }
             } while (true);
         }
+
+        static void DeleteAccount()
+        {
+            string UserName;
+            string Password;
+            Console.Write("Enter UserName: ");
+            UserName = Console.ReadLine();
+            Console.Write("Enter Password: ");
+            Password = Console.ReadLine();
+
+            Accounts account = businessLogic.ValidateAccount(UserName, Password);
+
+            if (account != null)
+            {
+                Console.Write("[Yes/No] Are you sure?: ");
+                string confirm = Console.ReadLine().ToLower();
+                if (confirm == "no")
+                {
+                    Console.WriteLine("Account Deletion Cancelled");
+                    return;
+                }
+                else if (confirm == "yes")
+                {
+                    businessLogic.DeleteAccount(account);
+                    Console.WriteLine("Account Deleted Successfully");
+                    SignUpOrLogIn();
+                }
+                else
+                {
+                    Console.WriteLine("Invalid Input\nPlease Enter Yes/No");
+                    DeleteAccount();
+                    return;
+                }   
+            }
+            else
+            {
+                Console.WriteLine("FAILED: Account Doesn't Exist or Incorrect Password. Please try again.");
+                SignUpOrLogIn();
+            }
+        }
     }
 }
+
