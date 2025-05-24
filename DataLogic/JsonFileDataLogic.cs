@@ -35,7 +35,7 @@ namespace DataLogic
 
             File.WriteAllText(accountsFilePath, jsonString);
         }
-        public List<Accounts> GetAnimeAccount()
+        public List<Accounts> GetAccounts()
         {
             return AnimeAccount;
         }
@@ -94,6 +94,31 @@ namespace DataLogic
             UserName.AnimeList[AnimeName].Ratings = Rate;
 
             WriteJsonDataToFile();
+        }
+
+        public List<AnimeList> GetAllAnimeList(Accounts UserName)
+        {
+            throw new NotImplementedException();
+        }
+
+        public void DeleteAnime(Accounts UserName, AnimeList anime)
+        {
+            throw new NotImplementedException();
+        }
+
+        public void DeleteAnime(Accounts UserName, string anime)
+        {
+            throw new NotImplementedException();
+        }
+
+        public void MarkAnimeAsWatched(Accounts UserName, string AnimeName, string formattedDate, string Rate)
+        {
+            throw new NotImplementedException();
+        }
+
+        public List<AnimeList> GetAllAnimeList()
+        {
+            throw new NotImplementedException();
         }
     }
 }

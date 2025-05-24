@@ -1,4 +1,6 @@
 ﻿using AccountFrame;
+using AnimeListFrame;
+using Microsoft.Data.SqlClient;
 using System.Globalization;
 
 namespace DataLogic
@@ -13,13 +15,13 @@ namespace DataLogic
         {
             //animeDataLogic = new TextFileDataLogic();
             //animeDataLogic = new InMemoryDataLogic();
-            animeDataLogic = new JsonFileDataLogic();
-
+            //animeDataLogic = new JsonFileDataLogic();
+            animeDataLogic = new DatabaseDataLogic();
         }
 
-        public List<Accounts> GetAnimeAccount()
+        public List<Accounts> GetAnimeAccounts()
         {
-            return animeDataLogic.GetAnimeAccount();
+            return animeDataLogic.GetAccounts();
         }
 
         public void AddAccount(Accounts accounts)
@@ -37,12 +39,12 @@ namespace DataLogic
             animeDataLogic.AddAnime(Username, AnimeName, Genre, ReleaseDate);
         }
 
-        public void DeleteAnime(Accounts account, int AnimeNameIndex)
+        public void DeleteAnime(Accounts account, string anime)
         {
-            animeDataLogic.DeleteAnime(account, AnimeNameIndex);
+            animeDataLogic.DeleteAnime(account, anime);
         }
 
-        public void MarkAnimeAsWatched(Accounts UserName, int AnimeName, string formattedDate, string Rate)
+        public void MarkAnimeAsWatched(Accounts UserName, string AnimeName, string formattedDate, string Rate)
         {
             animeDataLogic.MarkAnimeAsWatched(UserName, AnimeName, formattedDate, Rate);
         }
@@ -50,6 +52,11 @@ namespace DataLogic
         public List<AnimeListFrame.AnimeList> GetUserAnimeList(Accounts UserName)
         {
             return animeDataLogic.GetUserAnimeList(UserName);
+        }
+
+        public List<AnimeList> GetAllAnimeList()
+        {
+            return animeDataLogic.GetAllAnimeList();
         }
     }
 }
