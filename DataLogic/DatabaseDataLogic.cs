@@ -24,7 +24,7 @@ namespace DataLogic
 
         public List<Accounts> GetAccounts()
         {
-            string selectStatement = "SELECT AccountName, AccountUserName, AccountPassword FROM AccountDetails";
+            string selectStatement = "SELECT AccountName, AccountEmail, AccountPassword FROM AccountDetails";
 
             SqlCommand selectCommand = new SqlCommand(selectStatement, sqlConnection);
 
@@ -38,7 +38,7 @@ namespace DataLogic
             {
                 Accounts AnimeAccounts = new Accounts();
                 AnimeAccounts.Name = reader["AccountName"].ToString();
-                AnimeAccounts.UserName = reader["AccountUserName"].ToString();
+                AnimeAccounts.Email = reader["AccountEmail"].ToString();
                 AnimeAccounts.Password = reader["AccountPassword"].ToString();
                 AnimeAccount.Add(AnimeAccounts);
             }
@@ -49,12 +49,12 @@ namespace DataLogic
 
         public void AddAccount(Accounts accounts)
         {
-            var insertStatement = "INSERT INTO AccountDetails VALUES (@AccountName, @AccountUserName, @AccountPassword)";
+            var insertStatement = "INSERT INTO AccountDetails VALUES (@AccountName, @AccountEmail, @AccountPassword)";
 
             SqlCommand insertCommand = new SqlCommand(insertStatement, sqlConnection);
 
             insertCommand.Parameters.AddWithValue("@AccountName", accounts.Name);
-            insertCommand.Parameters.AddWithValue("@AccountUserName", accounts.UserName);
+            insertCommand.Parameters.AddWithValue("@AccountEmail", accounts.Email);
             insertCommand.Parameters.AddWithValue("@AccountPassword", accounts.Password);
             sqlConnection.Open();
 
@@ -67,9 +67,9 @@ namespace DataLogic
         {
             sqlConnection.Open();
 
-            var deleteStatement = $"DELETE FROM AccountDetails WHERE AccountUserName = @AccountUserName AND AccountPassword = @AccountPassword";
+            var deleteStatement = $"DELETE FROM AccountDetails WHERE AccountEmail = @AccountEmail AND AccountPassword = @AccountPassword";
             SqlCommand updateCommand = new SqlCommand(deleteStatement, sqlConnection);
-            updateCommand.Parameters.AddWithValue("@AccountUserName", account.UserName);
+            updateCommand.Parameters.AddWithValue("@AccountEmail", account.Email);
             updateCommand.Parameters.AddWithValue("@AccountPassword", account.Password);
 
             updateCommand.ExecuteNonQuery();
@@ -77,18 +77,16 @@ namespace DataLogic
             sqlConnection.Close();
         }
 
-        public List<AnimeList> GetUserAnimeList(Accounts UserName)
+        public List<AnimeList> GetUserAnimeList(Accounts Email)
         {
-            List<AnimeList> animeList = new List<AnimeList>();
-
             string selectStatement = @"
-            SELECT AnimeName, AnimeGenre, AnimeReleaseYear, AnimeIsWatched, AnimeDateAndTime, AnimeRatings
+            SELECT AnimeID, AnimeName, AnimeGenre, AnimeReleaseYear, AnimeIsWatched, AnimeDateAndTime, AnimeRatings
             FROM AnimeListDetails
-            WHERE AccountUserName = @AccountUserName";
+            WHERE AccountEmail = @AccountEmail";
 
             SqlCommand selectCommand = new SqlCommand(selectStatement, sqlConnection);
 
-            selectCommand.Parameters.AddWithValue("@AccountUserName", UserName.UserName);
+            selectCommand.Parameters.AddWithValue("@AccountEmail", Email.Email);
 
             sqlConnection.Open();
 
@@ -99,6 +97,7 @@ namespace DataLogic
             while (reader.Read())
             {
                 AnimeList animelist = new AnimeList();
+                animelist.AnimeID = Convert.ToInt32(reader["AnimeID"]); 
                 animelist.Name = reader["AnimeName"].ToString();
                 animelist.Genre = reader["AnimeGenre"].ToString();
                 animelist.ReleaseYear = reader["AnimeReleaseYear"].ToString();
@@ -116,7 +115,7 @@ namespace DataLogic
         {
 
             string selectStatement = @"
-            SELECT AccountUserName, AnimeName, AnimeGenre, AnimeReleaseYear, AnimeIsWatched, AnimeDateAndTime, AnimeRatings
+            SELECT AccountEmail, AnimeName, AnimeGenre, AnimeReleaseYear, AnimeIsWatched, AnimeDateAndTime, AnimeRatings
             FROM AnimeListDetails";
 
             SqlCommand selectCommand = new SqlCommand(selectStatement, sqlConnection);
@@ -130,7 +129,7 @@ namespace DataLogic
             while (reader.Read())
             {
                 AnimeList animelist = new AnimeList();
-                animelist.UserName = reader["AccountUserName"].ToString();
+                animelist.Email = reader["AccountEmail"].ToString();
                 animelist.Name = reader["AnimeName"].ToString();
                 animelist.Genre = reader["AnimeGenre"].ToString();
                 animelist.ReleaseYear = reader["AnimeReleaseYear"].ToString();
@@ -144,16 +143,16 @@ namespace DataLogic
             return Animelist;
         }
 
-        public void AddAnime(Accounts Username, string AnimeName, string Genre, string ReleaseDate)
+        public void AddAnime(AnimeList animeList)
         {
-            var insertStatement = "INSERT INTO AnimeListDetails VALUES (@AccountUserName, @AnimeName, @AnimeGenre, @AnimeReleaseYear, @AnimeIsWatched, @AnimeDateAndTime, @AnimeRatings)";
+            var insertStatement = "INSERT INTO AnimeListDetails VALUES (@AccountEmail, @AnimeName, @AnimeGenre, @AnimeReleaseYear, @AnimeIsWatched, @AnimeDateAndTime, @AnimeRatings)";
 
             SqlCommand insertCommand = new SqlCommand(insertStatement, sqlConnection);
 
-            insertCommand.Parameters.AddWithValue("@AccountUserName", Username.UserName);
-            insertCommand.Parameters.AddWithValue("@AnimeName", AnimeName);
-            insertCommand.Parameters.AddWithValue("@AnimeGenre", Genre);
-            insertCommand.Parameters.AddWithValue("@AnimeReleaseYear", ReleaseDate);
+            insertCommand.Parameters.AddWithValue("@AccountEmail", animeList.Email);
+            insertCommand.Parameters.AddWithValue("@AnimeName", animeList.Name);
+            insertCommand.Parameters.AddWithValue("@AnimeGenre", animeList.Genre);
+            insertCommand.Parameters.AddWithValue("@AnimeReleaseYear", animeList.ReleaseYear);
             insertCommand.Parameters.AddWithValue("@AnimeIsWatched", false);
             insertCommand.Parameters.AddWithValue("@AnimeDateAndTime", DBNull.Value);
             insertCommand.Parameters.AddWithValue("@AnimeRatings", DBNull.Value);
@@ -164,33 +163,92 @@ namespace DataLogic
             sqlConnection.Close();
         }
 
-        public void DeleteAnime(Accounts UserName, string anime)
+        public void DeleteAnime(AnimeList animeList)
         {
-            string deleteStatement = @"DELETE FROM AnimeListDetails WHERE AccountUserName = @UserName AND AnimeName = @AnimeName";
+            string deleteStatement = @"DELETE FROM AnimeListDetails WHERE AccountEmail = @Email AND AnimeID = @AnimeID";
 
             SqlCommand deleteCommand = new SqlCommand(deleteStatement, sqlConnection);
 
-            deleteCommand.Parameters.AddWithValue("@UserName", UserName.UserName);
-            deleteCommand.Parameters.AddWithValue("@AnimeName", anime);
+            deleteCommand.Parameters.AddWithValue("@AnimeID", animeList.AnimeID);
+            deleteCommand.Parameters.AddWithValue("@Email", animeList.Email);
+            
             sqlConnection.Open();
             deleteCommand.ExecuteNonQuery();
             sqlConnection.Close();
 
         }
 
-        public void MarkAnimeAsWatched(Accounts UserName, string AnimeName, string formattedDate, string Rate)
+        public void UpdateToWatchAnime(AnimeList animeList)
         {
             sqlConnection.Open();
 
-            var updateStatement = $"UPDATE AnimeListDetails SET AnimeIsWatched = @AnimeIsWatched, AnimeDateAndTime = @AnimeDateAndTime, AnimeRatings = @AnimeRatings WHERE AccountUserName = @AccountUserName AND AnimeName = @AnimeName";
+            var updateStatement = $"UPDATE AnimeListDetails SET AnimeName = @AnimeName, AnimeGenre = @AnimeGenre, AnimeReleaseYear = @AnimeReleaseYear WHERE AnimeID = @AnimeID AND AccountEmail = @AccountEmail";
+
+            SqlCommand insertCommand = new SqlCommand(updateStatement, sqlConnection);
+
+            insertCommand.Parameters.AddWithValue("@AnimeID", animeList.AnimeID);
+            insertCommand.Parameters.AddWithValue("@AccountEmail", animeList.Email);
+            insertCommand.Parameters.AddWithValue("@AnimeName", animeList.Name);
+            insertCommand.Parameters.AddWithValue("@AnimeGenre", animeList.Genre);
+            insertCommand.Parameters.AddWithValue("@AnimeReleaseYear", animeList.ReleaseYear);
+
+            insertCommand.ExecuteNonQuery();
+
+            sqlConnection.Close();
+        }
+
+        public void UpdateWatchedAnime(AnimeList animeList)
+        {
+            sqlConnection.Open();
+
+            var updateStatement = $"UPDATE AnimeListDetails SET AnimeName = @AnimeName, AnimeGenre = @AnimeGenre, AnimeReleaseYear = @AnimeReleaseYear, AnimeDateAndTime = @AnimeDateAndTime, AnimeRatings = @AnimeRatings WHERE AnimeID = @AnimeID AND AccountEmail = @AccountEmail";
+
+            SqlCommand insertCommand = new SqlCommand(updateStatement, sqlConnection);
+
+            insertCommand.Parameters.AddWithValue("@AnimeID", animeList.AnimeID);
+            insertCommand.Parameters.AddWithValue("@AccountEmail", animeList.Email);
+            insertCommand.Parameters.AddWithValue("@AnimeName", animeList.Name);
+            insertCommand.Parameters.AddWithValue("@AnimeGenre", animeList.Genre);
+            insertCommand.Parameters.AddWithValue("@AnimeReleaseYear", animeList.ReleaseYear);
+            insertCommand.Parameters.AddWithValue("@AnimeDateAndTime", animeList.DateAndTime);
+            insertCommand.Parameters.AddWithValue("@AnimeRatings", animeList.Ratings);
+
+            insertCommand.ExecuteNonQuery();
+
+            sqlConnection.Close();
+        }
+
+        public void MarkAnimeAsWatched(AnimeList animeList)
+        {
+            sqlConnection.Open();
+
+            var updateStatement = $"UPDATE AnimeListDetails SET AnimeIsWatched = @AnimeIsWatched, AnimeDateAndTime = @AnimeDateAndTime, AnimeRatings = @AnimeRatings WHERE AccountEmail = @AccountEmail AND AnimeID = @AnimeID";
 
             SqlCommand updateCommand = new SqlCommand(updateStatement, sqlConnection);
 
-            updateCommand.Parameters.AddWithValue("@AccountUserName", UserName.UserName);
-            updateCommand.Parameters.AddWithValue("@AnimeName", AnimeName);
+            updateCommand.Parameters.AddWithValue("@AccountEmail", animeList.Email);
+            updateCommand.Parameters.AddWithValue("@AnimeID", animeList.AnimeID);
             updateCommand.Parameters.AddWithValue("@AnimeIsWatched", true);
-            updateCommand.Parameters.AddWithValue("@AnimeDateAndTime", formattedDate);
-            updateCommand.Parameters.AddWithValue("@AnimeRatings", Rate);
+            updateCommand.Parameters.AddWithValue("@AnimeDateAndTime", animeList.DateAndTime);
+            updateCommand.Parameters.AddWithValue("@AnimeRatings", animeList.Ratings);
+            updateCommand.ExecuteNonQuery();
+
+            sqlConnection.Close();
+        }
+
+        public void MarkAnimeAsUnWatched(AnimeList animeList)
+        {
+            sqlConnection.Open();
+
+            var updateStatement = $"UPDATE AnimeListDetails SET AnimeIsWatched = @AnimeIsWatched, AnimeDateAndTime = @AnimeDateAndTime, AnimeRatings = @AnimeRatings WHERE AccountEmail = @AccountEmail AND AnimeID = @AnimeID";
+
+            SqlCommand updateCommand = new SqlCommand(updateStatement, sqlConnection);
+
+            updateCommand.Parameters.AddWithValue("@AccountEmail", animeList.Email);
+            updateCommand.Parameters.AddWithValue("@AnimeID", animeList.AnimeID);
+            updateCommand.Parameters.AddWithValue("@AnimeIsWatched", false);
+            updateCommand.Parameters.AddWithValue("@AnimeDateAndTime", DBNull.Value);
+            updateCommand.Parameters.AddWithValue("@AnimeRatings", DBNull.Value);
             updateCommand.ExecuteNonQuery();
 
             sqlConnection.Close();

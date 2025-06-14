@@ -9,7 +9,8 @@ namespace AnimeListFrame
 {
     public class AnimeList
     {
-        public string UserName { get; set; }
+        public int AnimeID { get; set; }
+        public string Email { get; set; }
         public string Name { get; set; }
         public string Genre { get; set; }
         public string ReleaseYear { get; set; }

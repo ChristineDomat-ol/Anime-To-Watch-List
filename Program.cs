@@ -59,6 +59,7 @@ namespace Anime_To_Watch_List
                     switch (useraction)
                     {
                         case "1":
+                            Console.WriteLine(businessLogic.GetUserAnimeList(currentUser).Count.ToString());
                             AddAnime();
                             break;
                         case "2":
@@ -237,15 +238,22 @@ namespace Anime_To_Watch_List
                     }
                     else
                     {
-                        isValidInput = true;
+                        AnimeList newAnime = new AnimeListFrame.AnimeList
+                        {
+                            Email = currentUser.Email,
+                            Name = UserAnimeInput.Trim(),
+                            Genre = Genre.Trim(),
+                            ReleaseYear = ReleaseDate.Trim(),
+                            IsWatched = false,
+                        };
 
-                        businessLogic.AddAnime(currentUser, UserAnimeInput, Genre, ReleaseDate);
+                        businessLogic.AddAnime(newAnime);
                         Console.WriteLine(UserAnimeInput + " Added");
+
+                        isValidInput = true;
                         ViewList();
                     }
                 } while (isValidInput == false);
-
-
 
             } while (Again(action));
         }
@@ -253,6 +261,7 @@ namespace Anime_To_Watch_List
         static void DeleteAnime()
         {
             var animeList = businessLogic.GetAllAnimeList();
+
             if (businessLogic.GetAllAnimeList() == null)
             {
                 Console.WriteLine("List is Empty, Please Add an Anime First");
@@ -268,11 +277,13 @@ namespace Anime_To_Watch_List
                     Console.Write("\nAnime to Delete: ");
                     string UserAnimeInput = GetUserAnimeInput();
 
+                    var anime = businessLogic.GetAnimeByName(currentUser, UserAnimeInput);
+
                     if (!string.IsNullOrEmpty(UserAnimeInput))
                     {
                         if (!string.IsNullOrEmpty(UserAnimeInput))
                         {
-                            businessLogic.DeleteAnime(currentUser, UserAnimeInput);
+                            businessLogic.DeleteAnime(anime);
                             Console.WriteLine(UserAnimeInput + " Deleted");
                             ViewList();
                         }
@@ -315,19 +326,26 @@ namespace Anime_To_Watch_List
                 {
                     if (businessLogic.GetAnimeByName(currentUser, UserAnimeInput) != null)
                     {
-                        if (businessLogic.GetAnimeStatusIsWatched(currentUser, UserAnimeInput))
+                        int ewan = 32;
+                        if (businessLogic.GetAnimeStatusIsWatched(currentUser, ewan))
                         {
                             Console.WriteLine(UserAnimeInput + " is already in your Watched List");
                         }
                         else
                         {
+                            
                             DateTime dateTime = DateTime.Now;
                             string formattedDate = dateTime.ToString("MMMM d, yyyy h:mm tt");
 
-
                             string rating = GetRating();
+                            var markAsWatchedAnime = new AnimeListFrame.AnimeList
+                            {
+                                Email = currentUser.Email,
+                                Name = UserAnimeInput.Trim(),
+                                IsWatched = true
+                            };
 
-                            businessLogic.MarkAnimeAsWatched(currentUser, UserAnimeInput, formattedDate, rating);
+                            businessLogic.MarkAnimeAsWatched(markAsWatchedAnime);
                             Console.WriteLine("\n" + UserAnimeInput + " has been Marked as Watched");
                             ViewList();
                         }
@@ -666,7 +684,7 @@ namespace Anime_To_Watch_List
                     Accounts newAccount = new Accounts
                     {
                         Name = Name,
-                        UserName = UserName,
+                        Email = UserName,
                         Password = Password
                     };
 

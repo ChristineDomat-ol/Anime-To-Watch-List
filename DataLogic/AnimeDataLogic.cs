@@ -34,19 +34,34 @@ namespace DataLogic
             animeDataLogic.DeleteAccount(account);
         }
 
-        public void AddAnime(Accounts Username, string AnimeName, string Genre, string ReleaseDate)
+        public void AddAnime(AnimeList animeList)
         {
-            animeDataLogic.AddAnime(Username, AnimeName, Genre, ReleaseDate);
+            animeDataLogic.AddAnime(animeList);
         }
 
-        public void DeleteAnime(Accounts account, string anime)
+        public void DeleteAnime(AnimeList animeList)
         {
-            animeDataLogic.DeleteAnime(account, anime);
+            animeDataLogic.DeleteAnime(animeList);
         }
 
-        public void MarkAnimeAsWatched(Accounts UserName, string AnimeName, string formattedDate, string Rate)
+        public void UpdateToWatchAnime(AnimeList animeList)
         {
-            animeDataLogic.MarkAnimeAsWatched(UserName, AnimeName, formattedDate, Rate);
+            animeDataLogic.UpdateToWatchAnime(animeList);
+        }
+
+        public void UpdateWatchedAnime(AnimeList animeList)
+        {
+            animeDataLogic.UpdateWatchedAnime(animeList);
+        }
+
+        public void MarkAnimeAsWatched(AnimeList animeList)
+        {
+            animeDataLogic.MarkAnimeAsWatched(animeList);
+        }
+
+        public void MarkAnimeAsUnWatched(AnimeList animeList)
+        {
+            animeDataLogic.MarkAnimeAsUnWatched(animeList);
         }
 
         public List<AnimeListFrame.AnimeList> GetUserAnimeList(Accounts UserName)

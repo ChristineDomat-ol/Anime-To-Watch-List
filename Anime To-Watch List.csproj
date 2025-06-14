@@ -10,14 +10,21 @@
 
   <ItemGroup>
     <Compile Remove="Accounts\**" />
+    <Compile Remove="AnimeList_Desktop\**" />
     <Compile Remove="BusinessDataLogic\**" />
     <Compile Remove="DataLogic\**" />
     <EmbeddedResource Remove="Accounts\**" />
+    <EmbeddedResource Remove="AnimeList_Desktop\**" />
     <EmbeddedResource Remove="BusinessDataLogic\**" />
     <EmbeddedResource Remove="DataLogic\**" />
     <None Remove="Accounts\**" />
+    <None Remove="AnimeList_Desktop\**" />
     <None Remove="BusinessDataLogic\**" />
     <None Remove="DataLogic\**" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <PackageReference Include="System.Resources.Extensions" Version="9.0.5" />
   </ItemGroup>
 
   <ItemGroup>

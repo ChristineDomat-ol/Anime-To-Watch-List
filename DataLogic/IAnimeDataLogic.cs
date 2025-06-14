@@ -14,9 +14,12 @@ namespace DataLogic
         public List<Accounts> GetAccounts();
         public void AddAccount(Accounts accounts);
         public void DeleteAccount(Accounts account);
-        public void AddAnime(Accounts Username, string AnimeName, string Genre, string ReleaseDate);
-        public void DeleteAnime(Accounts UserName, string anime);
-        public void MarkAnimeAsWatched(Accounts UserName, string AnimeName, string formattedDate, string Rate);
+        public void AddAnime(AnimeList animeList);
+        public void DeleteAnime(AnimeList animeList);
+        public void UpdateToWatchAnime(AnimeList animeList);
+        public void UpdateWatchedAnime(AnimeList animeList);
+        public void MarkAnimeAsWatched(AnimeList animeList);
+        public void MarkAnimeAsUnWatched(AnimeList animeList);
         public List<AnimeListFrame.AnimeList> GetUserAnimeList(Accounts UserName);
         public List<AnimeListFrame.AnimeList> GetAllAnimeList();
     }

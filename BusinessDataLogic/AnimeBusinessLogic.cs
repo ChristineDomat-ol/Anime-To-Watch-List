@@ -25,7 +25,7 @@ namespace BusinessLogic
 
             foreach (var animeItem in anime)
             {
-                if (animeItem.Name.Equals(AnimeName, StringComparison.OrdinalIgnoreCase) && animeItem.UserName.Equals(UserName.UserName))
+                if (animeItem.Name.Equals(AnimeName, StringComparison.OrdinalIgnoreCase) && animeItem.Email.Equals(UserName.Email))
                 {
                     return animeItem;
                 }
@@ -39,7 +39,7 @@ namespace BusinessLogic
 
             foreach (var anime in GetAllAnimeList())
             {
-                if (anime.Genre.Equals(AnimeGenre, StringComparison.OrdinalIgnoreCase) && anime.UserName.Equals(UserName.UserName))
+                if (anime.Genre.Equals(AnimeGenre, StringComparison.OrdinalIgnoreCase) && anime.Email.Equals(UserName.Email))
                 {
                     AnimeByGenreList.Add(anime);
                 }
@@ -60,7 +60,7 @@ namespace BusinessLogic
 
             foreach (var anime in GetAllAnimeList())
             {
-                if (anime.ReleaseYear.Equals(ReleaseYear, StringComparison.OrdinalIgnoreCase) && anime.UserName.Equals(UserName.UserName))
+                if (anime.ReleaseYear.Equals(ReleaseYear, StringComparison.OrdinalIgnoreCase) && anime.Email.Equals(UserName.Email))
                 {
                     AnimeByReleaseYearList.Add(anime);
                 }
@@ -75,13 +75,18 @@ namespace BusinessLogic
             }
         }
 
-        public bool GetAnimeStatusIsWatched(Accounts UserName, string AnimeName)
+        public bool GetAnimeStatusIsWatched(Accounts account, int AnimeID)
         {
-            var anime = GetAllAnimeList();
+            if (account == null)
+            {
+                throw new ArgumentNullException(nameof(account));
+            }
+
+            var anime = GetUserAnimeList(account);
 
             foreach (var animeEntry in anime)
             {
-                if (animeEntry.Name.Equals(AnimeName, StringComparison.OrdinalIgnoreCase) && animeEntry.UserName.Equals(UserName) && animeEntry.IsWatched)
+                if (animeEntry.AnimeID == AnimeID && animeEntry.IsWatched)
                 {
                     return true;
                 }
@@ -97,7 +102,7 @@ namespace BusinessLogic
 
             foreach (var animeEntry in anime)
             {
-                if (!animeEntry.IsWatched && animeEntry.UserName.Trim().Equals(UserName.UserName.Trim(), StringComparison.Ordinal))
+                if (!animeEntry.IsWatched && animeEntry.Email.Trim().Equals(UserName.Email.Trim(), StringComparison.Ordinal))
                 {
                     AnimeToWatchList.Add(animeEntry);
                 }
@@ -114,40 +119,49 @@ namespace BusinessLogic
                     
         public List<AnimeListFrame.AnimeList> GetAnimeWatchedList(Accounts UserName)
         {
-            List<AnimeListFrame.AnimeList> AnimeWatchedList = new List<AnimeListFrame.AnimeList>();
-
             var anime = GetAllAnimeList();
 
-            foreach (var animeEntry in anime)
+            List<AnimeList> watchedAnimeList = new List<AnimeList>();
+
+            foreach (AnimeList animeList in anime)
             {
-                if (animeEntry.IsWatched && animeEntry.UserName.Trim().Equals(UserName.UserName.Trim(), StringComparison.Ordinal))
+                if (animeList.IsWatched && animeList.Email.Trim() == UserName.Email.Trim())
                 {
-                    AnimeWatchedList.Add(animeEntry);
+                    watchedAnimeList.Add(animeList);
                 }
             }
-            if (AnimeWatchedList.Count == 0)
-            {
-                return null;
-            }
-            else
-            {
-                return AnimeWatchedList;
-            }
+
+            return watchedAnimeList;
         }
 
-        public void AddAnime(Accounts UserName, string AnimeName, string Genre, string ReleaseDate)
+        public void AddAnime(AnimeList animeList)
         {
-            dataLogic.AddAnime(UserName, AnimeName, Genre, ReleaseDate);
+            dataLogic.AddAnime(animeList);
         }
 
-        public void DeleteAnime(Accounts account, string anime)
+        public void DeleteAnime(AnimeList animeList)
         {
-            dataLogic.DeleteAnime(account, anime);
+            dataLogic.DeleteAnime(animeList);
         }
 
-        public void MarkAnimeAsWatched(Accounts UserName, string AnimeName, string formattedDate, string Rate)
+        public void UpdateToWatchAnime(AnimeList animeList)
         {
-            dataLogic.MarkAnimeAsWatched(UserName, AnimeName, formattedDate, Rate);
+            dataLogic.UpdateToWatchAnime(animeList);
+        }
+
+        public void UpdateWatchedAnime(AnimeList animeList)
+        {
+            dataLogic.UpdateWatchedAnime(animeList);
+        }
+
+        public void MarkAnimeAsWatched(AnimeList animeList)
+        {
+            dataLogic.MarkAnimeAsWatched(animeList);
+        }
+
+        public void MarkAnimeAsUnWatched(AnimeList animeList)
+        {
+            dataLogic.MarkAnimeAsUnWatched(animeList);
         }
 
         public Accounts ValidateAccount(string userName, string password)
@@ -156,7 +170,7 @@ namespace BusinessLogic
 
             foreach (var account in accounts)
             {
-                if (account.UserName.Trim() == userName.Trim() & account.Password.Trim() == password.Trim())
+                if (account.Email.Trim() == userName.Trim() & account.Password.Trim() == password.Trim())
                 {
                     return account;
                 }
