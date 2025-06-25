@@ -9,16 +9,19 @@ namespace AnimeList_Desktop
     {
 
         public static AnimeBusinessLogic businessLogic = new BusinessLogic.AnimeBusinessLogic();
-
         public static AccountFrame.Accounts currentUser;
         public LogIn()
         {
             InitializeComponent();
         }
+        
+        private void Form1_Load(object sender, EventArgs e)
+        {
+            this.ActiveControl = lblWelcomeBack;
+        }
 
         private void bttnLogIn_Click(object sender, EventArgs e)
         {
-
             var Email = txtboxEmail.Text;
             var Password = txtboxPassword.Text;
 
@@ -35,7 +38,7 @@ namespace AnimeList_Desktop
             if (account != null)
             {
                 currentUser = account;
-                MessageBox.Show("Log In Successful! Welcome", "Sumakses", MessageBoxButtons.OK, MessageBoxIcon.Information);
+                MessageBox.Show("Log In Successful! Welcome", "Success", MessageBoxButtons.OK, MessageBoxIcon.Information);
 
                 AnimeListForm animeList = new AnimeListForm();
                 animeList.ShowDialog();
@@ -49,73 +52,36 @@ namespace AnimeList_Desktop
                 return;
             }
 
-            txtboxEmail.Clear();
-            txtboxPassword.Clear();
-
-        }
-
-        private void Form1_Load(object sender, EventArgs e)
-        {
-            this.ActiveControl = lblWelcomeBack;
-        }
-
-        private void panel1_Paint(object sender, PaintEventArgs e)
-        {
-
-        }
-
-        private void pictureBox1_Click(object sender, EventArgs e)
-        {
-
-        }
-
-        private void pictureBox13_Click(object sender, EventArgs e)
-        {
-
-        }
-
-        private void txtboxPassword_TextChanged(object sender, EventArgs e)
-        {
-
-        }
-
-        private void lblWelcomeBack_Click(object sender, EventArgs e)
-        {
-
-        }
-
-        private void txtboxEmail_TextChanged(object sender, EventArgs e)
-        {
-
-        }
-
-        private void bttnSeePassword_Click(object sender, EventArgs e)
-        {
-            txtboxPassword.UseSystemPasswordChar = !txtboxPassword.UseSystemPasswordChar;
-        }
-
-        private void pictureBox2_Click(object sender, EventArgs e)
-        {
-
         }
 
         private void bttnClose_Click(object sender, EventArgs e)
         {
-            if (MessageBox.Show("Are you sure you want to close the application?",
-                    "Exit Confirmation",
-                    MessageBoxButtons.YesNo,
-                    MessageBoxIcon.Question) == DialogResult.Yes)
+            if (MessageBox.Show("Are you sure you want to close the application?", "Exit Confirmation", MessageBoxButtons.YesNo, MessageBoxIcon.Question) == DialogResult.Yes)
             {
                 Application.Exit();
             }
         }
 
-        private void button1_Click(object sender, EventArgs e)
+        private void bttnSignUp_Click(object sender, EventArgs e)
         {
             SignUp signUp = new SignUp();
             signUp.ShowDialog();
 
             this.Hide();
+        }
+
+        private void bttnSeePassword_Click(object sender, EventArgs e)
+        {
+            txtboxPassword.UseSystemPasswordChar = !txtboxPassword.UseSystemPasswordChar;
+
+            if (!txtboxPassword.UseSystemPasswordChar)
+            {
+                bttnSeePassword.BackgroundImage = Properties.Resources.EyeClose;
+            }
+            else
+            {
+                bttnSeePassword.BackgroundImage = Properties.Resources.EyeOpen;
+            }
         }
     }
 }

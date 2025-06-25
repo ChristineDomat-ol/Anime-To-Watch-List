@@ -32,7 +32,6 @@
             button1 = new Button();
             pictureBox17 = new PictureBox();
             txtboxConfirmPassword = new TextBox();
-            bttnSeePassword = new Button();
             pictureBox14 = new PictureBox();
             pictureBox15 = new PictureBox();
             txtboxEmail = new TextBox();
@@ -56,6 +55,7 @@
             pictureBox1 = new PictureBox();
             bttnSignUp = new Button();
             pictureBox16 = new PictureBox();
+            bttnSeePassword = new Button();
             panel1.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)pictureBox17).BeginInit();
             ((System.ComponentModel.ISupportInitialize)pictureBox14).BeginInit();
@@ -112,7 +112,7 @@
             // button1
             // 
             button1.BackColor = Color.FromArgb(45, 170, 158);
-            button1.BackgroundImage = Properties.Resources.Eye;
+            button1.BackgroundImage = Properties.Resources.EyeOpen;
             button1.BackgroundImageLayout = ImageLayout.Stretch;
             button1.FlatAppearance.BorderColor = Color.White;
             button1.FlatStyle = FlatStyle.Flat;
@@ -148,22 +148,6 @@
             txtboxConfirmPassword.Size = new Size(275, 40);
             txtboxConfirmPassword.TabIndex = 22;
             txtboxConfirmPassword.UseSystemPasswordChar = true;
-            // 
-            // bttnSeePassword
-            // 
-            bttnSeePassword.BackColor = Color.FromArgb(45, 170, 158);
-            bttnSeePassword.BackgroundImage = Properties.Resources.Eye;
-            bttnSeePassword.BackgroundImageLayout = ImageLayout.Stretch;
-            bttnSeePassword.FlatAppearance.BorderColor = Color.White;
-            bttnSeePassword.FlatStyle = FlatStyle.Flat;
-            bttnSeePassword.Font = new Font("Malgun Gothic", 18F);
-            bttnSeePassword.Location = new Point(475, 381);
-            bttnSeePassword.Name = "bttnSeePassword";
-            bttnSeePassword.Size = new Size(42, 42);
-            bttnSeePassword.TabIndex = 21;
-            bttnSeePassword.TabStop = false;
-            bttnSeePassword.UseVisualStyleBackColor = false;
-            bttnSeePassword.Click += bttnSeePassword_Click;
             // 
             // pictureBox14
             // 
@@ -279,7 +263,6 @@
             lblWelcome.TabIndex = 12;
             lblWelcome.Text = "Welcome!";
             lblWelcome.TextAlign = ContentAlignment.MiddleCenter;
-            lblWelcome.Click += lblWelcome_Click;
             // 
             // pictureBox3
             // 
@@ -431,6 +414,22 @@
             pictureBox16.TabIndex = 17;
             pictureBox16.TabStop = false;
             // 
+            // bttnSeePassword
+            // 
+            bttnSeePassword.BackColor = Color.FromArgb(45, 170, 158);
+            bttnSeePassword.BackgroundImage = Properties.Resources.EyeOpen;
+            bttnSeePassword.BackgroundImageLayout = ImageLayout.Stretch;
+            bttnSeePassword.FlatAppearance.BorderColor = Color.White;
+            bttnSeePassword.FlatStyle = FlatStyle.Flat;
+            bttnSeePassword.Font = new Font("Malgun Gothic", 18F);
+            bttnSeePassword.Location = new Point(475, 381);
+            bttnSeePassword.Name = "bttnSeePassword";
+            bttnSeePassword.Size = new Size(42, 42);
+            bttnSeePassword.TabIndex = 21;
+            bttnSeePassword.TabStop = false;
+            bttnSeePassword.UseVisualStyleBackColor = false;
+            bttnSeePassword.Click += bttnSeePassword_Click;
+            // 
             // SignUp
             // 
             AutoScaleDimensions = new SizeF(8F, 20F);
@@ -491,11 +490,11 @@
         private PictureBox pictureBox16;
         private PictureBox pictureBox14;
         private TextBox txtboxEmail;
-        private Button bttnSeePassword;
         private PictureBox pictureBox15;
         private TextBox txtboxPassword;
         private Button button1;
         private PictureBox pictureBox17;
         private TextBox txtboxConfirmPassword;
+        private Button bttnSeePassword;
     }
 }

@@ -16,6 +16,7 @@ namespace DataLogic
         public void DeleteAccount(Accounts account);
         public void AddAnime(AnimeList animeList);
         public void DeleteAnime(AnimeList animeList);
+        public void UpdateAccount(Accounts account);
         public void UpdateToWatchAnime(AnimeList animeList);
         public void UpdateWatchedAnime(AnimeList animeList);
         public void MarkAnimeAsWatched(AnimeList animeList);

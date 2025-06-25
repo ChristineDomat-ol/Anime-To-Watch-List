@@ -47,7 +47,7 @@ namespace AnimeList_Desktop
             }
             else if (account != null)
             {
-                MessageBox.Show("Sign Up Successful! Please log in with your new account.");
+                MessageBox.Show("Account Already Exist. Redirecting to the login screen...", "Account Exist", MessageBoxButtons.OK, MessageBoxIcon.Information);
                 logIn.Show();
 
                 this.Close();
@@ -63,29 +63,16 @@ namespace AnimeList_Desktop
 
                 businessLogic.AddAccount(newAccount);
 
-                MessageBox.Show("Sign Up Successful! Please log in with your new account.");
+                MessageBox.Show("Sign Up Successful! Please log in with your new account.", "Account Created Sucessfully", MessageBoxButtons.OK, MessageBoxIcon.Information);
                 logIn.Show();
 
                 this.Close();
             }
         }
 
-        private void lblWelcome_Click(object sender, EventArgs e)
-        {
-
-        }
-
-        private void txtboxEmail_TextChanged(object sender, EventArgs e)
-        {
-
-        }
-
         private void bttnClose_Click(object sender, EventArgs e)
         {
-            if (MessageBox.Show("Are you sure you want to close the application?",
-                    "Exit Confirmation",
-                    MessageBoxButtons.YesNo,
-                    MessageBoxIcon.Question) == DialogResult.Yes)
+            if (MessageBox.Show("Are you sure you want to close the application?", "Exit Confirmation", MessageBoxButtons.YesNo, MessageBoxIcon.Question) == DialogResult.Yes)
             {
                 Application.Exit();
             }
@@ -99,19 +86,32 @@ namespace AnimeList_Desktop
             this.Close();
         }
 
-        private void txtboxPassword_TextChanged(object sender, EventArgs e)
-        {
-
-        }
-
         private void bttnSeePassword_Click(object sender, EventArgs e)
         {
             txtboxPassword.UseSystemPasswordChar = !txtboxPassword.UseSystemPasswordChar;
+
+            if (!txtboxPassword.UseSystemPasswordChar)
+            {
+                bttnSeePassword.BackgroundImage = Properties.Resources.EyeClose;
+            }
+            else
+            {
+                bttnSeePassword.BackgroundImage = Properties.Resources.EyeOpen;
+            }
         }
 
         private void button1_Click(object sender, EventArgs e)
         {
             txtboxConfirmPassword.UseSystemPasswordChar = !txtboxConfirmPassword.UseSystemPasswordChar;
+
+            if (!txtboxConfirmPassword.UseSystemPasswordChar)
+            {
+                button1.BackgroundImage = Properties.Resources.EyeClose;
+            }
+            else
+            {
+                button1.BackgroundImage = Properties.Resources.EyeOpen;
+            }
         }
     }
 }

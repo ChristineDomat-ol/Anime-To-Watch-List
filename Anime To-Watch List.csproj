@@ -11,14 +11,17 @@
   <ItemGroup>
     <Compile Remove="Accounts\**" />
     <Compile Remove="AnimeList_Desktop\**" />
+    <Compile Remove="AnimeList_WebAPI\**" />
     <Compile Remove="BusinessDataLogic\**" />
     <Compile Remove="DataLogic\**" />
     <EmbeddedResource Remove="Accounts\**" />
     <EmbeddedResource Remove="AnimeList_Desktop\**" />
+    <EmbeddedResource Remove="AnimeList_WebAPI\**" />
     <EmbeddedResource Remove="BusinessDataLogic\**" />
     <EmbeddedResource Remove="DataLogic\**" />
     <None Remove="Accounts\**" />
     <None Remove="AnimeList_Desktop\**" />
+    <None Remove="AnimeList_WebAPI\**" />
     <None Remove="BusinessDataLogic\**" />
     <None Remove="DataLogic\**" />
   </ItemGroup>

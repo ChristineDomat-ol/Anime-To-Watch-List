@@ -34,6 +34,11 @@ namespace DataLogic
             animeDataLogic.DeleteAccount(account);
         }
 
+        public void UpdateAccount(Accounts account)
+        {
+            animeDataLogic.UpdateAccount(account);
+        }
+
         public void AddAnime(AnimeList animeList)
         {
             animeDataLogic.AddAnime(animeList);

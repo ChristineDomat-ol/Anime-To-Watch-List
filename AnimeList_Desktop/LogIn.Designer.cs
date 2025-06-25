@@ -89,7 +89,6 @@
             pictureBox2.SizeMode = PictureBoxSizeMode.StretchImage;
             pictureBox2.TabIndex = 7;
             pictureBox2.TabStop = false;
-            pictureBox2.Click += pictureBox2_Click;
             // 
             // bttnSignUp
             // 
@@ -106,7 +105,7 @@
             bttnSignUp.TabStop = false;
             bttnSignUp.Text = "Sign Up";
             bttnSignUp.UseVisualStyleBackColor = false;
-            bttnSignUp.Click += button1_Click;
+            bttnSignUp.Click += bttnSignUp_Click;
             // 
             // bttnClose
             // 
@@ -133,7 +132,6 @@
             pictureBox1.SizeMode = PictureBoxSizeMode.StretchImage;
             pictureBox1.TabIndex = 0;
             pictureBox1.TabStop = false;
-            pictureBox1.Click += pictureBox1_Click;
             // 
             // pictureBox4
             // 
@@ -225,7 +223,6 @@
             pictureBox13.SizeMode = PictureBoxSizeMode.StretchImage;
             pictureBox13.TabIndex = 11;
             pictureBox13.TabStop = false;
-            pictureBox13.Click += pictureBox13_Click;
             // 
             // pictureBox3
             // 
@@ -249,7 +246,6 @@
             txtboxPassword.Size = new Size(275, 40);
             txtboxPassword.TabIndex = 3;
             txtboxPassword.UseSystemPasswordChar = true;
-            txtboxPassword.TextChanged += txtboxPassword_TextChanged;
             // 
             // lblWelcomeBack
             // 
@@ -262,7 +258,6 @@
             lblWelcomeBack.Size = new Size(408, 57);
             lblWelcomeBack.TabIndex = 12;
             lblWelcomeBack.Text = "Welcome Back!";
-            lblWelcomeBack.Click += lblWelcomeBack_Click;
             // 
             // bttnLogIn
             // 
@@ -289,7 +284,6 @@
             txtboxEmail.PlaceholderText = " Email";
             txtboxEmail.Size = new Size(314, 40);
             txtboxEmail.TabIndex = 2;
-            txtboxEmail.TextChanged += txtboxEmail_TextChanged;
             // 
             // pictureBox14
             // 
@@ -316,7 +310,7 @@
             // bttnSeePassword
             // 
             bttnSeePassword.BackColor = Color.FromArgb(45, 170, 158);
-            bttnSeePassword.BackgroundImage = Properties.Resources.Eye;
+            bttnSeePassword.BackgroundImage = Properties.Resources.EyeOpen;
             bttnSeePassword.BackgroundImageLayout = ImageLayout.Stretch;
             bttnSeePassword.FlatStyle = FlatStyle.Flat;
             bttnSeePassword.Font = new Font("Malgun Gothic", 18F);
@@ -354,7 +348,6 @@
             panel1.Name = "panel1";
             panel1.Size = new Size(681, 725);
             panel1.TabIndex = 6;
-            panel1.Paint += panel1_Paint;
             // 
             // LogIn
             // 
