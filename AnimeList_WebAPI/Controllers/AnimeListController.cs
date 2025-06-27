@@ -10,7 +10,7 @@ using Microsoft.Extensions.Primitives;
 namespace AnimeList_WebAPI.Controllers
 {
     [ApiController]
-    [Route("api/[controller]")]
+    [Route("animeList/[controller]")]
     public class AnimeListController : ControllerBase
     {
         static AnimeBusinessLogic businessLogic = new AnimeBusinessLogic();
