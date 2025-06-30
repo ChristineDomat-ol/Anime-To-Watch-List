@@ -1,230 +1,290 @@
-﻿//using AccountFrame;
-//using AnimeListFrame;
-//using System;
-//using System.Collections.Generic;
-//using System.Linq;
-//using System.Security.Principal;
-//using System.Text;
-//using System.Threading.Tasks;
-//using System.Xml.Linq;
+﻿using AccountFrame;
+using AnimeListFrame;
 
-//namespace DataLogic
-//{
-//    public class TextFileDataLogic : IAnimeDataLogic
-//    {
-//        string accountsFilePath = "accounts.txt";
-//        string animeListFilePath = "animeList.txt";
+namespace DataLogic
+{
+    public class TextFileDataLogic : IAnimeDataLogic
+    {
+        string accountsFilePath = "accounts.txt";
+        string animeListFilePath = "animeList.txt";
 
-//        List<Accounts> AnimeAccount = new List<Accounts>();
+        List<Accounts> AnimeAccount = new List<Accounts>();
 
-//        public TextFileDataLogic()
-//        {
-//            GetAccountDataFromFile();
-//        }
+        public TextFileDataLogic()
+        {
+            GetAccountDataFromFile();
+        }
 
-//        public List<Accounts> GetAccounts()
-//        {
-//            return AnimeAccount;
-//        }
+        public List<Accounts> GetAccounts()
+        {
+            return AnimeAccount;
+        }
 
-//        public void GetAccountDataFromFile()
-//        {
-//            AnimeAccount.Clear();
+        public void GetAccountDataFromFile()
+        {
+            AnimeAccount.Clear();
 
-//            var lines = File.ReadAllLines(accountsFilePath);
+            var lines = File.ReadAllLines(accountsFilePath);
 
-//            foreach (var line in lines)
-//            {
-//                var parts = line.Split('|');
+            foreach (var line in lines)
+            {
+                var parts = line.Split('|');
 
-//                AnimeAccount.Add(new Accounts
-//                {
-//                    Name = parts[0],
-//                    UserName = parts[1],
-//                    Password = parts[2]
-//                });
-//            }
+                AnimeAccount.Add(new Accounts
+                {
+                    AccountID = int.Parse(parts[0]),
+                    Name = parts[1],
+                    Email = parts[2],
+                    Password = parts[3]
+                });
+            }
 
-//            GetAnimeListDataFromFile();
-//        }
+            GetAnimeListDataFromFile();
+        }
 
-//        public void AddAccount(Accounts accounts)
-//        {
-//            AnimeAccount.Add(accounts);
+        public void AddAccount(Accounts accounts)
+        {
+            int accCount = AnimeAccount.Count;  
 
-//            var newLine = $"\n{accounts.Name}|{accounts.UserName}|{accounts.Password}";
+            AnimeAccount.Add(accounts);
 
-//            File.AppendAllText(accountsFilePath, newLine);
+            var newLine = $"\n{accCount+1}|{accounts.Name}|{accounts.Email}|{accounts.Password}";
 
-//            GetAccountDataFromFile();
-//        }
+            File.AppendAllText(accountsFilePath, newLine);
 
-//        public void DeleteAccount(Accounts account)
-//        {
-//            int index = -1;
-//            for (int i = 0; i < AnimeAccount.Count; i++)
-//            {
-//                if (AnimeAccount[i].UserName == account.UserName && AnimeAccount[i].Password == account.Password)
-//                {
-//                    index = i;
-//                }
-//            }
-//            AnimeAccount.RemoveAt(index);
+            GetAccountDataFromFile();
+        }
 
-//            WriteAccountDataToFile();
-//            GetAccountDataFromFile();
-//        }
+        public void DeleteAccount(Accounts account)
+        {
+            int index = -1;
+            for (int i = 0; i < AnimeAccount.Count; i++)
+            {
+                if (AnimeAccount[i].Email == account.Email && AnimeAccount[i].Password == account.Password)
+                {
+                    index = i;
+                }
+            }
+            AnimeAccount.RemoveAt(index);
 
-//        private void WriteAccountDataToFile()
-//        {
-//            var lines = new string[AnimeAccount.Count];
+            WriteAccountDataToFile();
+            GetAccountDataFromFile();
+        }
 
-//            for (int i = 0; i < AnimeAccount.Count; i++)
-//            {
-//                lines[i] = $"{AnimeAccount[i].Name}|{AnimeAccount[i].UserName}|{AnimeAccount[i].Password}";
-//            }
+        private void WriteAccountDataToFile()
+        {
+            var lines = new string[AnimeAccount.Count];
 
-//            File.WriteAllLines(accountsFilePath, lines);
-//        }
+            for (int i = 0; i < AnimeAccount.Count; i++)
+            {
+                lines[i] = $"{AnimeAccount[i].AccountID}|{AnimeAccount[i].Name}|{AnimeAccount[i].Email}|{AnimeAccount[i].Password}";
+            }
 
-//        public void AddAnime(Accounts Username, string AnimeName, string Genre, string ReleaseDate)
-//        {
-//            Username.AnimeList.Add(new AnimeListFrame.AnimeList
-//            {
-//                Name = AnimeName,
-//                Genre = Genre,
-//                ReleaseYear = ReleaseDate
-//            });
+            File.WriteAllLines(accountsFilePath, lines);
+        }
 
-//            var newLine = $"\n{Username.UserName}|{AnimeName}|{Genre}|{ReleaseDate}|False| |";
+        public void AddAnime(AnimeList animeList)
+        {
+            Accounts Username = null;
 
-//            File.AppendAllText(animeListFilePath, newLine);
+            foreach (var account in AnimeAccount)
+            {
+                if (account.AccountID == animeList.AccountID)
+                {
+                    Username = account;
+                    break; 
+                }
+            }
 
-//            GetAnimeListDataFromFile();
-//        }
+            Username.AnimeList.Add(new AnimeListFrame.AnimeList
+            {
+                Name = animeList.Name,
+                Genre = animeList.Genre,
+                ReleaseYear = animeList.ReleaseYear
+            });
 
-//        public void DeleteAnime(Accounts accounts, int animeIndex)
-//        {
-//            accounts.AnimeList.RemoveAt(animeIndex);
-//            WriteAnimeListDataToFile(accounts);
-//            GetAnimeListDataFromFile();
-//        }
+            var newLine = $"\n{Username.Email}|{animeList.Name}|{animeList.Genre}|{animeList.ReleaseYear}|False| |";
 
-//        public void MarkAnimeAsWatched(Accounts accounts, int AnimeName, string formattedDate, string Rate)
-//        {
-//            accounts.AnimeList[AnimeName].IsWatched = true;
-//            accounts.AnimeList[AnimeName].DateAndTime = formattedDate;
-//            accounts.AnimeList[AnimeName].Ratings = Rate;
+            File.AppendAllText(animeListFilePath, newLine);
 
-//            WriteAnimeListDataToFile(accounts);
-//            GetAnimeListDataFromFile();
-//        }
+            GetAnimeListDataFromFile();
+        }
 
-//        public List<AnimeListFrame.AnimeList> GetUserAnimeList(Accounts UserName)
-//        {
-//            if (UserName.AnimeList.Count == 0)
-//            {
-//                return null;
-//            }
-//            return UserName.AnimeList;
-//        }
+        public void DeleteAnime(AnimeList animeList)
+        {
+            Accounts accounts = null;
 
-//        public void GetAnimeListDataFromFile()
-//        {
-//            foreach (var account in AnimeAccount)
-//            {
-//                account.AnimeList.Clear();
-//            }
+            foreach (var account in AnimeAccount)
+            {
+                if (account.AccountID == animeList.AccountID)
+                {
+                    accounts = account;
+                    break;
+                }
+            }
 
-//            var lines = File.ReadAllLines(animeListFilePath);
+            int animeIndex = -1;
 
-//            foreach (var line in lines)
-//            {
-//                var parts = line.Split('|');
+            for (int i = 0; i < accounts.AnimeList.Count; i++)
+            {
+                if (accounts.AnimeList[i].Name.Equals(animeList.Name, StringComparison.OrdinalIgnoreCase) &&
+                    accounts.AnimeList[i].AccountID == animeList.AccountID)
+                {
+                    animeIndex = i;
+                    break;
+                }
+            }
 
-//                var username = parts[0];
+            if (animeIndex != -1)
+            {
+                accounts.AnimeList.RemoveAt(animeIndex);
+                WriteAnimeListDataToFile();
+                GetAnimeListDataFromFile();
+                Console.WriteLine("Anime deleted successfully.");
+            }
+            else
+            {
+                Console.WriteLine("Anime not found in the list.");
+            }
+        }
 
-//                Accounts account = null;
 
-//                foreach (var a in AnimeAccount)
-//                {
-//                    if (a.UserName == username)
-//                    {
-//                        account = a;
-//                        break;
-//                    }
-//                }
+        public void MarkAnimeAsWatched(AnimeList animeList)
+        {
+            Accounts accounts = null;
 
-//                if (account != null)
-//                {
-//                    account.AnimeList.Add(new AnimeListFrame.AnimeList
-//                    {
-//                        Name = parts[1],
-//                        Genre = parts[2],
-//                        ReleaseYear = parts[3],
-//                        IsWatched = bool.Parse(parts[4]),
-//                        DateAndTime = parts[5],
-//                        Ratings = parts[6]
-//                    });
-//                }
-//            }
-//        }
+            foreach (var account in AnimeAccount)
+            {
+                if (account.AccountID == animeList.AccountID)
+                {
+                    accounts = account;
+                    break;
+                }
+            }
 
-//        private void WriteAnimeListDataToFile(Accounts accounts)
-//        {
-//            var lines = new string[accounts.AnimeList.Count];
-//            int index = 0;
+            accounts.AnimeList[animeList.AnimeID].IsWatched = true;
+            accounts.AnimeList[animeList.AnimeID].DateAndTime = animeList.DateAndTime;
+            accounts.AnimeList[animeList.AnimeID].Ratings = animeList.Ratings;
 
-//            foreach (var anime in accounts.AnimeList)
-//            {
-//                string line = $"{accounts.UserName}|{anime.Name}|{anime.Genre}|{anime.ReleaseYear}|{anime.IsWatched}|{anime.DateAndTime}|{anime.Ratings}";
-//                lines[index] = line;
-//                index++;
-//            }
+            WriteAnimeListDataToFile(accounts);
+            GetAnimeListDataFromFile();
+        }
 
-//            File.WriteAllLines(animeListFilePath, lines);
-//        }
+        public List<AnimeListFrame.AnimeList> GetUserAnimeList(Accounts UserName)
+        {
+            if (UserName.AnimeList.Count == 0)
+            {
+                return null;
+            }
+            return UserName.AnimeList;
+        }
 
-//        public List<AnimeList> GetAllAnimeList(Accounts UserName)
-//        {
-//            throw new NotImplementedException();
-//        }
+        public void GetAnimeListDataFromFile()
+        {
+            foreach (var account in AnimeAccount)
+            {
+                account.AnimeList.Clear();
+            }
 
-//        public void DeleteAnime(Accounts UserName, AnimeList anime)
-//        {
-//            throw new NotImplementedException();
-//        }
+            var lines = File.ReadAllLines(animeListFilePath);
 
-//        public void DeleteAnime(Accounts UserName, string anime)
-//        {
-//            throw new NotImplementedException();
-//        }
+            foreach (var line in lines)
+            {
+                var parts = line.Split('|');
 
-//        public void MarkAnimeAsWatched(Accounts UserName, string AnimeName, string formattedDate, string Rate)
-//        {
-//            throw new NotImplementedException();
-//        }
+                var username = parts[0];
 
-//        public List<AnimeList> GetAllAnimeList()
-//        {
-//            throw new NotImplementedException();
-//        }
+                Accounts account = null;
 
-//        //private void WriteAnimeListDataToFile()
-//        //{
-//        //    var lines = new List<string>();
+                foreach (var a in AnimeAccount)
+                {
+                    if (a.Email == username)
+                    {
+                        account = a;
+                        break;
+                    }
+                }
 
-//        //    foreach (var account in AnimeAccount)
-//        //    {
-//        //        foreach (var anime in account.AnimeList)
-//        //        {
-//        //            string line = $"{account.UserName}|{anime.Name}|{anime.Genre}|{anime.ReleaseYear}|{anime.IsWatched}|{anime.DateAndTime}|{anime.Ratings}";
-//        //            lines.Add(line);
-//        //        }
-//        //    }
+                if (account != null)
+                {
+                    account.AnimeList.Add(new AnimeListFrame.AnimeList
+                    {
+                        Name = parts[1],
+                        Genre = parts[2],
+                        ReleaseYear = parts[3],
+                        IsWatched = bool.Parse(parts[4]),
+                        DateAndTime = parts[5],
+                        Ratings = parts[6]
+                    });
+                }
+            }
+        }
 
-//        //    File.WriteAllLines(animeListFilePath, lines);
-//        //}
+        private void WriteAnimeListDataToFile(Accounts accounts)
+        {
+            var lines = new string[accounts.AnimeList.Count];
+            int index = 0;
 
-//    }
-//}
+            foreach (var anime in accounts.AnimeList)
+            {
+                string line = $"{accounts.Email}|{anime.Name}|{anime.Genre}|{anime.ReleaseYear}|{anime.IsWatched}|{anime.DateAndTime}|{anime.Ratings}";
+                lines[index] = line;
+                index++;
+            }
+
+            File.WriteAllLines(animeListFilePath, lines);
+        }
+
+        public List<AnimeList> GetAllAnimeList()
+        {
+            List<AnimeList> allAnime = new List<AnimeList>();
+
+            foreach (var account in AnimeAccount)
+            {
+                allAnime.AddRange(account.AnimeList); 
+            }
+
+            return allAnime;
+        }
+
+        private void WriteAnimeListDataToFile()
+        {
+            var lines = new List<string>();
+
+            foreach (var account in AnimeAccount)
+            {
+                foreach (var anime in account.AnimeList)
+                {
+                    string line = $"{account.Email}|{anime.Name}|{anime.Genre}|{anime.ReleaseYear}|{anime.IsWatched}|{anime.DateAndTime}|{anime.Ratings}";
+                    lines.Add(line);
+                }
+            }
+
+            File.WriteAllLines(animeListFilePath, lines);
+        }
+
+        public void UpdateAccount(Accounts account)
+        {
+            //implemented this method in WinForms UI, but not in console UI
+            throw new NotImplementedException();
+        }
+
+        public void UpdateToWatchAnime(AnimeList animeList)
+        {
+            //implemented this method in WinForms UI, but not in console UI
+            throw new NotImplementedException();
+        }
+
+        public void UpdateWatchedAnime(AnimeList animeList)
+        {
+            //implemented this method in WinForms UI, but not in console UI
+            throw new NotImplementedException();
+        }
+
+        public void MarkAnimeAsUnWatched(AnimeList animeList)
+        {
+            //implemented this method in WinForms UI, but not in console UI
+            throw new NotImplementedException();
+        }
+    }
+}

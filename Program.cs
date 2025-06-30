@@ -1,8 +1,6 @@
 ﻿using AccountFrame;
 using AnimeListFrame;
 using BusinessLogic;
-using DataLogic;
-using System.Xml.Linq;
 
 namespace Anime_To_Watch_List
 {
@@ -278,10 +276,16 @@ namespace Anime_To_Watch_List
                 if (!string.IsNullOrEmpty(UserAnimeInput))
                 {
                     var anime = businessLogic.GetAnimeByName(currentUser, UserAnimeInput);
-                    
+
+                    var deleteAnime = new AnimeList
+                    {
+                        AccountID = currentUser.AccountID,
+                        Name = anime.Name
+                    };
+
                     if (anime != null)
                     {
-                        businessLogic.DeleteAnime(anime);
+                        businessLogic.DeleteAnime(deleteAnime);
                         Console.WriteLine(UserAnimeInput + " Deleted");
                         ViewList();
                     }
@@ -405,7 +409,8 @@ namespace Anime_To_Watch_List
                     {
                         watchedStatus = "[Not Watched]";
                     }
-                    Console.WriteLine("- " + anime.Name + " (" + anime.Genre + ", " + anime.ReleaseYear + ") " + watchedStatus);
+                    string cleanGenre = anime.Genre.Replace("\n", "").Replace("\r", "").Trim();
+                    Console.WriteLine("- " + anime.Name + " (" + cleanGenre + ", " + anime.ReleaseYear + ") " + watchedStatus);
                 }
             }
 
@@ -422,9 +427,8 @@ namespace Anime_To_Watch_List
                 Console.WriteLine("\nTo-Watch List:");
                 foreach (var anime in businessLogic.GetAnimeToWatchedList(currentUser))
                 {
-
-                    Console.WriteLine("- " + anime.Name + " (" + anime.Genre + ", " + anime.ReleaseYear + ")" + " [Not Watched]");
-
+                    string cleanGenre = anime.Genre.Replace("\n", "").Replace("\r", "").Trim();
+                    Console.WriteLine("- " + anime.Name + " (" + cleanGenre + ", " + anime.ReleaseYear + ")" + " [Not Watched]");
                 }
             }
         }
@@ -440,9 +444,8 @@ namespace Anime_To_Watch_List
                 Console.WriteLine("\nWatched List:");
                 foreach (var anime in businessLogic.GetAnimeWatchedList(currentUser))
                 {
-
-                    Console.WriteLine("- " + anime.Name + " (" + anime.Genre + ", " + anime.ReleaseYear + ") [Watched  - " + anime.DateAndTime + "] Rating: " + anime.Ratings + " stars");
-
+                    string cleanGenre = anime.Genre.Replace("\n", "").Replace("\r", "").Trim();
+                    Console.WriteLine("- " + anime.Name + " (" + cleanGenre + ", " + anime.ReleaseYear + ") [Watched  - " + anime.DateAndTime + "] Rating: " + anime.Ratings + " stars");
                 }
             }
         }
