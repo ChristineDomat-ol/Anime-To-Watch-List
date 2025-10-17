@@ -30,6 +30,8 @@ namespace Email
             </html>";
 
             message.Body = new TextPart("html") { Text = htmlBody };
+
+
             //message.Body = new TextPart("plain")
             //{
             //    Text = $"Hello, " + accountName + "\n\nA new account has been created.\nAccount Name: " + accountName + "\nAccount Email: " + accountEmail + "\nCreation Time:" + DateTime.Now + "\n\nRegards,\nAnime Manager",
