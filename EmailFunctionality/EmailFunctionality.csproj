@@ -9,17 +9,6 @@
   <ItemGroup>
     <PackageReference Include="MailKit" Version="4.14.1" />
     <PackageReference Include="MimeKit" Version="4.14.0" />
-    <PackageReference Include="System.Resources.Extensions" Version="9.0.5" />
-  </ItemGroup>
-
-  <ItemGroup>
-    <ProjectReference Include="..\DataLogic\DataLogic.csproj" />
-  </ItemGroup>
-
-  <ItemGroup>
-    <Reference Include="EmailFunctionality">
-      <HintPath>..\EmailFunctionality\bin\Debug\net8.0\EmailFunctionality.dll</HintPath>
-    </Reference>
   </ItemGroup>
 
 </Project>

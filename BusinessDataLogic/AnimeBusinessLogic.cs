@@ -1,12 +1,14 @@
 ﻿using AccountFrame;
 using AnimeListFrame;
 using DataLogic;
+using Email;
 
 namespace BusinessLogic
 {
     public class AnimeBusinessLogic
     {
         static AnimeDataLogic dataLogic = new AnimeDataLogic();
+        static EmailService emailService = new EmailService();
 
         public List<AnimeList> GetUserAnimeList(Accounts UserName)
         {
@@ -187,6 +189,7 @@ namespace BusinessLogic
         public void AddAccount(Accounts account)
         {
             dataLogic.AddAccount(account);
+            emailService.SendEmail(account.Name, account.Email);
         }
 
         public void DeleteAccount(Accounts account)

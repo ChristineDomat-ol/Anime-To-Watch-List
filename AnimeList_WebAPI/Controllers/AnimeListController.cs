@@ -1,11 +1,7 @@
 ﻿using AccountFrame;
 using AnimeListFrame;
-using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using BusinessLogic;
-using Microsoft.Identity.Client;
-using System.Globalization;
-using Microsoft.Extensions.Primitives;
 
 namespace AnimeList_WebAPI.Controllers
 {
